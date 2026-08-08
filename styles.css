@@ -1,0 +1,2300 @@
+/* ==========================================================================
+   ANUNNAKI — System stylesheet
+   Layer order is declared once, here. Nothing outside these layers.
+   ========================================================================== */
+
+/* Layer order is declared before the import so colors.css's `tokens` layer
+   lands at the bottom of the cascade rather than being appended last. */
+@layer tokens, reset, base, layout, components, utilities;
+
+@import url("colors.css");
+
+/* ==========================================================================
+   RESET
+   ========================================================================== */
+
+@layer reset {
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  * { margin: 0; }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    scroll-padding-block-start: calc(var(--header-h) + var(--space-5));
+  }
+
+  body {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    min-block-size: 100svb;
+  }
+
+  img, svg, video, canvas, picture {
+    display: block;
+    max-inline-size: 100%;
+    block-size: auto;
+  }
+
+  input, button, textarea, select {
+    font: inherit;
+    color: inherit;
+  }
+
+  button { background: none; border: none; cursor: pointer; }
+
+  p, h1, h2, h3, h4, h5, h6 { overflow-wrap: break-word; }
+
+  ul[class], ol[class] { list-style: none; padding-inline-start: 0; }
+
+  table { border-collapse: collapse; border-spacing: 0; }
+
+  :target { scroll-margin-block-start: calc(var(--header-h) + var(--space-6)); }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* ==========================================================================
+   BASE — element defaults, typography
+   ========================================================================== */
+
+@layer base {
+
+  body {
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: var(--leading-body);
+    color: var(--text-primary);
+    background-color: var(--surface-canvas);
+    font-variant-numeric: tabular-nums;
+  }
+
+  h1, h2, h3, h4, h5 {
+    font-family: var(--font-display);
+    font-weight: var(--weight-semibold);
+    line-height: var(--leading-heading);
+    letter-spacing: var(--tracking-heading);
+    text-wrap: balance;
+    color: inherit;
+  }
+
+  /* Only the two largest sizes take the width axis. Widening h3 and below
+     costs legibility at body-adjacent sizes without buying any of the
+     logotype resemblance, which only reads at display scale. */
+  h1 {
+    font-size: var(--text-h1);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-display);
+    font-stretch: var(--width-wide);
+  }
+  h2 { font-size: var(--text-h2); font-stretch: var(--width-wide); }
+  h3 { font-size: var(--text-h3); }
+  h4 { font-size: var(--text-h4); }
+  h5 { font-size: var(--text-h5); letter-spacing: 0; }
+
+  p { text-wrap: pretty; }
+
+  a {
+    color: var(--text-link);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.22em;
+    transition: color var(--dur-fast) var(--ease);
+  }
+  a:hover { color: var(--text-link-hover); }
+
+  strong, b { font-weight: var(--weight-semibold); }
+
+  /* One focus treatment. Survives white and marine-600 alike. */
+  :focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+    border-radius: var(--radius-xs);
+  }
+
+  ::selection {
+    background-color: var(--marine-100);
+    color: var(--navy-900);
+  }
+
+  code, kbd, samp {
+    font-family: var(--font-mono);
+    font-size: 0.92em;
+  }
+
+  hr {
+    border: none;
+    border-block-start: var(--hairline) solid var(--border-hairline);
+  }
+
+  figure { margin: 0; }
+  figcaption {
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    line-height: var(--leading-caption);
+    color: var(--text-muted);
+    letter-spacing: var(--tracking-mono);
+    padding-block-start: var(--space-3);
+  }
+}
+
+/* ==========================================================================
+   LAYOUT — containers, grid, sections, the waterline rule
+   ========================================================================== */
+
+@layer layout {
+
+  .container {
+    inline-size: 100%;
+    max-inline-size: var(--content-max);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  .container--wide { max-inline-size: var(--wide-max); }
+  .container--prose { max-inline-size: calc(var(--measure-prose) + var(--gutter) * 2); }
+
+  /* Full-bleed escape for hero imagery inside a constrained flow. */
+  .bleed {
+    inline-size: 100vw;
+    margin-inline-start: 50%;
+    transform: translateX(-50%);
+  }
+
+  .section {
+    padding-block: var(--section-md);
+    position: relative;
+  }
+  .section--sm { padding-block: var(--section-sm); }
+  .section--lg { padding-block: var(--section-lg); }
+  .section--flush-top { padding-block-start: 0; }
+  .section--flush-bottom { padding-block-end: 0; }
+
+  .section--sunken  { background-color: var(--surface-sunken); }
+  .section--raised  { background-color: var(--surface-raised); }
+  .section--brand   { background-color: var(--surface-brand);   color: var(--text-on-brand); }
+  .section--inverse { background-color: var(--surface-inverse); color: var(--text-on-brand); }
+
+  .section--brand :is(h1,h2,h3,h4,h5),
+  .section--inverse :is(h1,h2,h3,h4,h5) { color: var(--text-on-brand); }
+  .section--brand p,
+  .section--inverse p { color: var(--text-on-brand-dim); }
+
+  /* 12-column grid. */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(var(--columns), minmax(0, 1fr));
+    gap: var(--gutter);
+  }
+
+  .auto-grid {
+    display: grid;
+    gap: var(--gutter);
+    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  }
+  .auto-grid--3 { grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); }
+  .auto-grid--4 { grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); }
+
+  .stack > * + * { margin-block-start: var(--flow, var(--space-5)); }
+  .stack--tight { --flow: var(--space-3); }
+  .stack--loose { --flow: var(--space-6); }
+
+  .cluster {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    align-items: center;
+  }
+
+  /* ------------------------------------------------------------------------
+     The waterline. Thin over thick, like a hull stripe. This is the one
+     motif the whole system is built on — section separator, active-nav
+     underline, logo accent bar.
+     ------------------------------------------------------------------------ */
+
+  .waterline {
+    border: none;
+    block-size: 3px;
+    inline-size: 100%;
+    background:
+      linear-gradient(to bottom,
+        var(--waterline-thin)  0 1px,
+        transparent            1px 2px,
+        var(--waterline-thick) 2px 3px);
+    opacity: 0.9;
+  }
+
+  .waterline--short { inline-size: 64px; }
+  .waterline--accent {
+    background:
+      linear-gradient(to bottom,
+        var(--waterline-thin)   0 1px,
+        transparent             1px 2px,
+        var(--accent-graphic)   2px 3px);
+  }
+  .waterline--on-brand {
+    background:
+      linear-gradient(to bottom,
+        var(--waterline-thin-on-brand)  0 1px,
+        transparent                     1px 2px,
+        var(--waterline-thick-on-brand) 2px 3px);
+    opacity: 1;
+  }
+
+  /* Section boundary rule — sits inside the container, not edge to edge. */
+  .section-rule {
+    border: none;
+    block-size: var(--hairline);
+    background-color: var(--border-hairline);
+  }
+}
+
+/* ==========================================================================
+   COMPONENTS
+   ========================================================================== */
+
+@layer components {
+
+  /* ------------------------------------------------------------------------
+     Skip link
+     ------------------------------------------------------------------------ */
+
+  .skip-link {
+    position: absolute;
+    inset-block-start: var(--space-2);
+    inset-inline-start: var(--space-2);
+    z-index: 200;
+    padding: var(--space-3) var(--space-4);
+    background-color: var(--surface-inverse);
+    color: var(--text-on-brand);
+    font-family: var(--font-display);
+    font-size: var(--text-small);
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    transform: translateY(-200%);
+    transition: transform var(--dur-fast) var(--ease);
+  }
+  .skip-link:focus-visible {
+    transform: translateY(0);
+    color: var(--text-on-brand);
+  }
+
+  /* ------------------------------------------------------------------------
+     Logotype — the accent bar is the waterline motif at its smallest.
+     ------------------------------------------------------------------------ */
+
+  .logo {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0;
+    font-family: var(--font-display);
+    font-weight: var(--weight-bold);
+    font-stretch: var(--width-widest);
+    font-size: 1.0625rem;
+    letter-spacing: 0.30em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: inherit;
+    white-space: nowrap;
+  }
+  .logo:hover { color: inherit; }
+
+  .logo__mark {
+    position: relative;
+    display: inline-block;
+  }
+  /* The stroke through the A — the deck's orange bar. */
+  .logo__mark::after {
+    content: "";
+    position: absolute;
+    inset-block-end: 0.16em;
+    inset-inline-start: -0.06em;
+    inline-size: 0.86em;
+    block-size: 0.16em;
+    background-color: var(--accent-graphic);
+  }
+
+  .logo--lg { font-size: 1.5rem; letter-spacing: 0.34em; }
+  .logo--sm { font-size: 0.9375rem; letter-spacing: 0.26em; }
+
+  /* ------------------------------------------------------------------------
+     Header — transparent over hero, solid on scroll.
+     ------------------------------------------------------------------------ */
+
+  .site-header {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 100;
+    block-size: var(--header-h);
+    display: flex;
+    align-items: center;
+    background-color: var(--surface-canvas);
+    border-block-end: var(--hairline) solid var(--border-hairline);
+    transition:
+      background-color var(--dur-mid) var(--ease),
+      border-color var(--dur-mid) var(--ease),
+      box-shadow var(--dur-mid) var(--ease);
+  }
+
+  /* Over-hero variant: the header sits on the render until first scroll. */
+  .site-header[data-over-hero="true"] {
+    position: fixed;
+    inset-inline: 0;
+    background-color: transparent;
+    border-block-end-color: transparent;
+    color: var(--text-on-brand);
+  }
+  .site-header[data-over-hero="true"] .nav__link { color: var(--text-on-brand); }
+  .site-header[data-over-hero="true"] .nav__link::after { background: var(--accent-graphic); }
+  .site-header[data-over-hero="true"] .nav-toggle__bar { background-color: var(--text-on-brand); }
+
+  /* Note: no `position` change here. The over-hero variant is already fixed;
+     the default variant stays sticky. Switching sticky→fixed on scroll would
+     collapse the header's flow space and jump the page by one header height. */
+  .site-header.is-scrolled {
+    background-color: var(--surface-canvas);
+    border-block-end-color: var(--border-hairline);
+    box-shadow: var(--shadow-sticky);
+    color: var(--text-primary);
+  }
+  .site-header.is-scrolled .nav__link { color: var(--text-primary); }
+  .site-header.is-scrolled .nav-toggle__bar { background-color: var(--text-primary); }
+
+  .site-header__inner {
+    inline-size: 100%;
+    max-inline-size: var(--wide-max);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-6);
+  }
+
+  .nav {
+    display: none;
+    align-items: center;
+    gap: var(--space-6);
+  }
+  @media (min-width: 1000px) { .nav { display: flex; } }
+
+  .nav__list {
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+    margin: 0;
+  }
+
+  .nav__link {
+    position: relative;
+    display: inline-block;
+    padding-block: var(--space-2);
+    font-family: var(--font-display);
+    font-size: var(--text-small);
+    font-weight: var(--weight-medium);
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    color: var(--text-primary);
+    white-space: nowrap;
+    transition: color var(--dur-fast) var(--ease);
+  }
+
+  /* Active nav underline is the waterline again. */
+  .nav__link::after {
+    content: "";
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline: 0;
+    block-size: 2px;
+    background-color: var(--accent-graphic);
+    transform: scaleX(0);
+    transition: transform var(--dur-fast) var(--ease);
+  }
+  .nav__link:hover::after { transform: scaleX(1); }
+  .nav__link[aria-current="page"]::after { transform: scaleX(1); }
+
+  .nav__link--has-menu { padding-inline-end: var(--space-4); }
+  .nav__caret {
+    position: absolute;
+    inset-inline-end: 0;
+    inset-block-start: 50%;
+    inline-size: 8px;
+    block-size: 8px;
+    margin-block-start: -5px;
+    border-inline-end: 1.5px solid currentColor;
+    border-block-end: 1.5px solid currentColor;
+    transform: rotate(45deg);
+    opacity: 0.6;
+  }
+
+  /* Dropdown for the vessels group. */
+  .nav__item { position: relative; }
+  .nav__menu {
+    position: absolute;
+    inset-block-start: calc(100% + var(--space-3));
+    inset-inline-start: calc(var(--space-4) * -1);
+    min-inline-size: 260px;
+    padding: var(--space-2);
+    background-color: var(--surface-canvas);
+    border: var(--hairline) solid var(--border-hairline);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-overlay);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-6px);
+    transition:
+      opacity var(--dur-fast) var(--ease),
+      transform var(--dur-fast) var(--ease),
+      visibility var(--dur-fast) var(--ease);
+  }
+
+  /* Hover bridge.
+     The menu is offset --space-3 below the nav item, and that gap belongs to
+     neither box — moving the pointer down towards the menu drops :hover and
+     the menu closes before it can be clicked. This pseudo-element fills the
+     gap. It is inside the menu, so hovering it keeps .nav__item:hover true
+     (hover propagates to ancestors), and it inherits the menu's own
+     visibility so it never blocks clicks while the menu is closed. */
+  .nav__menu::before {
+    content: "";
+    position: absolute;
+    inset-block-end: 100%;
+    inset-inline: 0;
+    block-size: calc(var(--space-3) + 2px);
+  }
+
+  .nav__item:hover > .nav__menu,
+  .nav__item:focus-within > .nav__menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .nav__menu-link {
+    display: block;
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: background-color var(--dur-fast) var(--ease);
+  }
+  .nav__menu-link:hover { background-color: var(--surface-sunken); color: var(--text-primary); }
+  .nav__menu-link .nav__menu-title {
+    display: block;
+    font-family: var(--font-display);
+    font-size: var(--text-small);
+    font-weight: var(--weight-semibold);
+  }
+  .nav__menu-link .nav__menu-meta {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    color: var(--text-muted);
+    margin-block-start: 2px;
+  }
+
+  /* Mobile drawer toggle. */
+  .nav-toggle {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    inline-size: 44px;
+    block-size: 44px;
+    padding: 0 10px;
+    border-radius: var(--radius-sm);
+  }
+  @media (min-width: 1000px) { .nav-toggle { display: none; } }
+
+  .nav-toggle__bar {
+    display: block;
+    block-size: 2px;
+    inline-size: 100%;
+    background-color: var(--text-primary);
+    transition: transform var(--dur-fast) var(--ease), opacity var(--dur-fast) var(--ease);
+  }
+  .nav-toggle[aria-expanded="true"] .nav-toggle__bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-toggle[aria-expanded="true"] .nav-toggle__bar:nth-child(2) { opacity: 0; }
+  .nav-toggle[aria-expanded="true"] .nav-toggle__bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .drawer {
+    position: fixed;
+    inset-block-start: var(--header-h);
+    inset-inline: 0;
+    inset-block-end: 0;
+    z-index: 99;
+    padding: var(--space-6) var(--gutter) var(--space-9);
+    background-color: var(--surface-canvas);
+    overflow-y: auto;
+    transform: translateY(-8px);
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity var(--dur-mid) var(--ease),
+      transform var(--dur-mid) var(--ease),
+      visibility var(--dur-mid) var(--ease);
+  }
+  .drawer[data-open="true"] { opacity: 1; visibility: visible; transform: translateY(0); }
+  @media (min-width: 1000px) { .drawer { display: none; } }
+
+  .drawer__link {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding-block: var(--space-4);
+    border-block-end: var(--hairline) solid var(--border-hairline);
+    font-family: var(--font-display);
+    font-size: var(--text-h5);
+    font-weight: var(--weight-medium);
+    text-decoration: none;
+    color: var(--text-primary);
+  }
+  .drawer__link .drawer__meta {
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    color: var(--text-muted);
+    letter-spacing: var(--tracking-mono);
+  }
+  .drawer__link[aria-current="page"] { color: var(--text-accent); }
+  .drawer__group-label {
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-eyebrow);
+    color: var(--text-accent);
+    padding-block: var(--space-6) var(--space-2);
+  }
+
+  /* ------------------------------------------------------------------------
+     Buttons
+     ------------------------------------------------------------------------ */
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 13px var(--space-5);
+    border-radius: var(--radius-sm);
+    border: var(--hairline) solid transparent;
+    font-family: var(--font-display);
+    font-size: var(--text-small);
+    font-weight: var(--weight-semibold);
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+      background-color var(--dur-fast) var(--ease),
+      border-color var(--dur-fast) var(--ease),
+      color var(--dur-fast) var(--ease);
+  }
+
+  .btn__arrow {
+    inline-size: 16px;
+    block-size: 16px;
+    flex: none;
+    transition: transform var(--dur-fast) var(--ease);
+  }
+  .btn:hover .btn__arrow { transform: translateX(3px); }
+
+  .btn--primary {
+    background-color: var(--surface-brand);
+    color: var(--text-on-brand);
+  }
+  .btn--primary:hover { background-color: var(--marine-700); color: var(--text-on-brand); }
+
+  .btn--secondary {
+    background-color: var(--surface-canvas);
+    border-color: var(--border-strong);
+    color: var(--text-primary);
+  }
+  .btn--secondary:hover {
+    border-color: var(--navy-900);
+    background-color: var(--surface-sunken);
+    color: var(--text-primary);
+  }
+
+  .btn--ghost {
+    padding-inline: 0;
+    color: var(--text-link);
+    border-block-end: 2px solid var(--accent-graphic);
+    border-radius: 0;
+  }
+  .btn--ghost:hover { color: var(--text-link-hover); }
+
+  /* On a marine-600 or navy-900 field. */
+  .btn--on-brand {
+    background-color: var(--white);
+    color: var(--marine-800);
+  }
+  .btn--on-brand:hover { background-color: var(--marine-50); color: var(--marine-900); }
+
+  .btn--on-brand-outline {
+    background-color: transparent;
+    border-color: var(--border-on-brand-strong);
+    color: var(--text-on-brand);
+  }
+  .btn--on-brand-outline:hover {
+    background-color: rgb(255 255 255 / 0.10);
+    border-color: var(--white);
+    color: var(--text-on-brand);
+  }
+
+  .btn--lg { padding: 16px var(--space-6); font-size: var(--text-body); }
+
+  /* ------------------------------------------------------------------------
+     Eyebrow + section header
+     ------------------------------------------------------------------------ */
+
+  .eyebrow {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 0.8125rem;
+    font-weight: var(--weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-eyebrow);
+    color: var(--text-accent);
+    margin-block-end: var(--space-4);
+  }
+  .eyebrow--on-brand { color: var(--marine-200); }
+  .eyebrow--on-dark  { color: var(--text-accent-on-dark); }
+
+  .section-header {
+    max-inline-size: 780px;
+    margin-block-end: var(--space-8);
+  }
+  .section-header--center {
+    margin-inline: auto;
+    text-align: center;
+  }
+  .section-header__lead {
+    max-inline-size: var(--measure-lead);
+    margin-block-start: var(--space-5);
+    font-size: var(--text-body-lg);
+    line-height: var(--leading-body-lg);
+    color: var(--text-secondary);
+  }
+  .section-header--center .section-header__lead { margin-inline: auto; }
+
+  .prose { max-inline-size: var(--measure-prose); color: var(--text-secondary); }
+  .prose > * + * { margin-block-start: var(--space-4); }
+  .prose :is(h2,h3,h4) { color: var(--text-primary); margin-block-start: var(--space-7); }
+  .prose ul, .prose ol { padding-inline-start: var(--space-5); }
+  .prose li + li { margin-block-start: var(--space-2); }
+
+  /* ------------------------------------------------------------------------
+     Hero — three variants.
+     ------------------------------------------------------------------------ */
+
+  .hero { position: relative; }
+
+  /* (a) Full-bleed: figure fills, scrim, text over. */
+  .hero--bleed {
+    min-block-size: min(88svb, 760px);
+    display: flex;
+    align-items: flex-end;
+    background-color: var(--marine-900);
+    color: var(--text-on-brand);
+    overflow: hidden;
+    padding-block: var(--space-9) var(--space-8);
+  }
+  .hero--bleed .hero__media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .hero--bleed .hero__media > * {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    /* Fixed waterline crop — hulls line up across sections. */
+    object-position: center 62%;
+  }
+  /* Two scrims, not one. The bottom gradient seats the composition; the side
+     gradient gives the text column its own ground so drawing linework can run
+     behind the headline without crossing it. Side first so it composites on top. */
+  .hero--bleed .hero__scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: var(--scrim-brand-side), var(--scrim-brand);
+  }
+  .hero--bleed .hero__inner { position: relative; z-index: 2; }
+  .hero--bleed :is(h1,h2) { color: var(--text-on-brand); }
+
+  .hero__title { max-inline-size: 16ch; }
+  .hero__lead {
+    max-inline-size: var(--measure-lead);
+    margin-block-start: var(--space-5);
+    font-size: var(--text-body-lg);
+    line-height: var(--leading-body-lg);
+    color: var(--marine-100);
+  }
+  .hero__actions { margin-block-start: var(--space-7); }
+
+  /* Registration mark, mono, bottom-right of a bleed hero. */
+  .hero__reg {
+    position: absolute;
+    inset-block-end: var(--space-6);
+    inset-inline-end: var(--gutter);
+    z-index: 2;
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    letter-spacing: 0.12em;
+    color: rgb(255 255 255 / 0.7);
+    text-align: end;
+  }
+
+  /* (b) Split: drawing or render one side, text the other. */
+  .hero--split {
+    display: grid;
+    gap: 0;
+    background-color: var(--surface-canvas);
+    padding-block-start: var(--header-h);
+  }
+  @media (min-width: 900px) {
+    .hero--split { grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); align-items: center; }
+  }
+  .hero--split .hero__inner {
+    padding: var(--section-md) var(--gutter);
+    max-inline-size: 640px;
+    margin-inline-start: auto;
+  }
+  @media (max-width: 899px) {
+    .hero--split .hero__inner { margin-inline: auto; }
+  }
+  .hero--split .hero__media {
+    background-color: var(--surface-sunken);
+    block-size: 100%;
+    min-block-size: 380px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-6);
+  }
+
+  /* (c) Title block: secondary pages. Marine field, no imagery.
+     The header on these pages is sticky and therefore occupies flow space,
+     so this does NOT need to reserve a header height on top. */
+  .hero--title {
+    background-color: var(--surface-brand);
+    color: var(--text-on-brand);
+    padding-block: var(--space-9);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero--title h1 { color: var(--text-on-brand); max-inline-size: 20ch; }
+  .hero--title .hero__lead { color: var(--marine-100); }
+  /* Faint hull-stripe field, drawn not decorated. */
+  .hero--title::after {
+    content: "";
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline: 0;
+    block-size: 3px;
+    background:
+      linear-gradient(to bottom,
+        var(--waterline-thin-on-brand)  0 1px,
+        transparent                     1px 2px,
+        var(--accent-graphic)           2px 3px);
+  }
+
+  /* ------------------------------------------------------------------------
+     Vessel card — container-queried so it works 3-up and full-width.
+     ------------------------------------------------------------------------ */
+
+  .vessel-card {
+    container-type: inline-size;
+    container-name: vessel-card;
+    /* relative so the title link's ::after can cover the whole card */
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--surface-canvas);
+    border: var(--hairline) solid var(--border-hairline);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color var(--dur-fast) var(--ease);
+  }
+  .vessel-card:hover { border-color: var(--border-strong); color: inherit; }
+  .vessel-card:has(a:focus-visible) { border-color: var(--marine-500); }
+
+  .vessel-card__media {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    background-color: var(--surface-sunken);
+    border-block-end: var(--hairline) solid var(--border-hairline);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-5);
+    overflow: hidden;
+  }
+  .vessel-card__media svg { inline-size: 100%; block-size: auto; }
+
+  .vessel-card__tag {
+    position: absolute;
+    inset-block-start: var(--space-3);
+    inset-inline-start: var(--space-3);
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    letter-spacing: 0.08em;
+    padding: 3px var(--space-2);
+    background-color: var(--surface-inverse);
+    color: var(--text-on-brand);
+    border-radius: var(--radius-xs);
+  }
+
+  .vessel-card__body {
+    padding: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    flex: 1;
+  }
+
+  .vessel-card__title {
+    font-size: var(--text-h4);
+    margin: 0;
+  }
+  .vessel-card__title a {
+    text-decoration: none;
+    color: var(--text-primary);
+  }
+  .vessel-card__title a::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+
+  .vessel-card__desc {
+    font-size: var(--text-small);
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  .vessel-card__specs {
+    margin-block-start: auto;
+    padding-block-start: var(--space-4);
+    border-block-start: var(--hairline) solid var(--border-subtle);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-3) var(--space-4);
+  }
+  .vessel-card__spec dt {
+    font-family: var(--font-body);
+    font-size: var(--text-caption);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+  }
+  .vessel-card__spec dd {
+    margin: 2px 0 0;
+    font-family: var(--font-mono);
+    font-size: var(--text-small);
+    font-weight: var(--weight-medium);
+    color: var(--text-primary);
+  }
+
+  .vessel-card__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-display);
+    font-size: var(--text-small);
+    font-weight: var(--weight-semibold);
+    color: var(--text-link);
+  }
+
+  /* Wide slot: media beside body. */
+  @container vessel-card (min-width: 640px) {
+    .vessel-card { flex-direction: row; }
+    .vessel-card__media {
+      flex: 0 0 46%;
+      aspect-ratio: auto;
+      border-block-end: none;
+      border-inline-end: var(--hairline) solid var(--border-hairline);
+    }
+    .vessel-card__body { padding: var(--space-7); }
+    .vessel-card__specs { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+
+  /* ------------------------------------------------------------------------
+     Spec table — the component that carries the credibility.
+     Single schema, renders as one-vessel sheet or three-column comparison.
+     Real <table>, real <th scope>. Procurement copies this into a sheet.
+     ------------------------------------------------------------------------ */
+
+  .spec {
+    container-type: inline-size;
+    container-name: spec;
+  }
+
+  .spec__scroll { overflow-x: auto; }
+
+  .spec-table {
+    inline-size: 100%;
+    font-size: var(--text-small);
+  }
+
+  .spec-table caption {
+    text-align: start;
+    padding-block-end: var(--space-4);
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    letter-spacing: var(--tracking-mono);
+    color: var(--text-muted);
+  }
+
+  .spec-table th,
+  .spec-table td {
+    padding: var(--space-4) var(--space-4);
+    text-align: start;
+    vertical-align: baseline;
+    border-block-end: var(--hairline) solid var(--border-hairline);
+  }
+
+  .spec-table thead th {
+    padding-block: var(--space-3) var(--space-3);
+    border-block-end: 2px solid var(--waterline-thick);
+    font-family: var(--font-display);
+    font-size: var(--text-body);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-heading);
+    color: var(--text-primary);
+    white-space: nowrap;
+  }
+  .spec-table thead th:first-child {
+    font-family: var(--font-body);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-medium);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+  }
+  .spec-table thead th .spec-table__sub {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-regular);
+    letter-spacing: var(--tracking-mono);
+    color: var(--text-muted);
+    margin-block-start: 2px;
+    text-transform: none;
+  }
+
+  /* Row labels: small caps, grey-600. */
+  .spec-table tbody th[scope="row"] {
+    inline-size: 34%;
+    font-family: var(--font-body);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-medium);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--text-secondary);
+  }
+
+  /* Values: mono, end-aligned. Metric primary, imperial muted below. */
+  .spec-table td {
+    font-family: var(--font-mono);
+    font-size: var(--text-small);
+    font-weight: var(--weight-medium);
+    color: var(--text-primary);
+    text-align: end;
+    letter-spacing: var(--tracking-mono);
+  }
+  .spec-table--compare td { text-align: end; }
+
+  .spec-alt {
+    display: block;
+    font-size: var(--text-caption);
+    font-weight: var(--weight-regular);
+    color: var(--text-muted);
+    margin-block-start: 2px;
+  }
+
+  .spec-table tbody tr:hover { background-color: var(--surface-sunken); }
+  .spec-table tbody tr:last-child :is(th, td) { border-block-end: none; }
+
+  /* Group header row inside a long sheet. */
+  .spec-table tbody tr.spec-group th {
+    padding-block: var(--space-6) var(--space-2);
+    border-block-end: var(--hairline) solid var(--waterline-thick);
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-eyebrow);
+    color: var(--text-accent);
+  }
+
+  /* Unit toggle. */
+  .unit-toggle {
+    display: inline-flex;
+    border: var(--hairline) solid var(--border-hairline);
+    border-radius: var(--radius-xs);
+    overflow: hidden;
+  }
+  .unit-toggle__btn {
+    padding: var(--space-2) var(--space-4);
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+    background-color: var(--surface-canvas);
+    transition: background-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+  }
+  .unit-toggle__btn + .unit-toggle__btn { border-inline-start: var(--hairline) solid var(--border-hairline); }
+  .unit-toggle__btn[aria-pressed="true"] {
+    background-color: var(--surface-inverse);
+    color: var(--text-on-brand);
+  }
+
+  .spec__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-block-end: var(--space-5);
+  }
+
+  /* ---- Narrow: single-vessel sheet becomes a stacked definition list ----
+     One label, one value, so label-left / value-right still reads correctly.
+     Explicitly excludes the comparison variant, which has three value columns
+     and needs the different treatment below. */
+  @container spec (max-width: 640px) {
+    .spec-table:not(.spec-table--compare),
+    .spec-table:not(.spec-table--compare) tbody,
+    .spec-table:not(.spec-table--compare) tr { display: block; inline-size: 100%; }
+    .spec-table:not(.spec-table--compare) thead { display: none; }
+
+    .spec-table:not(.spec-table--compare) tbody tr {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--space-3);
+      padding-block: var(--space-3);
+      border-block-end: var(--hairline) solid var(--border-hairline);
+    }
+    .spec-table:not(.spec-table--compare) tbody th[scope="row"],
+    .spec-table:not(.spec-table--compare) tbody td {
+      display: block;
+      inline-size: auto;
+      padding: 0;
+      border: none;
+    }
+    .spec-table:not(.spec-table--compare) tbody td { text-align: end; }
+    .spec-table:not(.spec-table--compare) tbody tr.spec-group { display: block; }
+    .spec-table:not(.spec-table--compare) tbody tr.spec-group th { inline-size: 100%; }
+  }
+
+  /* ---- Narrow: comparison sheet becomes one block per particular ----
+     Flattening a 4-column comparison into a single flex row strands the values
+     ("70.6 m  70.6 m  70.6 m" with no way to tell which vessel is which) and
+     overflows the viewport. Instead each row becomes its own block: the
+     particular as a heading, then one labelled line per vessel. The column name
+     is re-attached from data-col, since thead is hidden here.
+     Breakpoint is higher than the single-vessel one because four columns run
+     out of room sooner than two. */
+  @container spec (max-width: 860px) {
+    .spec-table--compare,
+    .spec-table--compare tbody,
+    .spec-table--compare tr { display: block; inline-size: 100%; }
+    .spec-table--compare thead { display: none; }
+
+    .spec-table--compare tbody tr {
+      padding-block: var(--space-4);
+      border-block-end: var(--hairline) solid var(--border-hairline);
+    }
+
+    .spec-table--compare tbody th[scope="row"] {
+      display: block;
+      inline-size: auto;
+      padding: 0 0 var(--space-3);
+      border: none;
+      color: var(--text-primary);
+    }
+
+    /* The label floats and the value flows beside it, wrapping underneath when
+       it is long. Deliberately NOT a flex row with space-between: that pushes
+       the value to the far edge of the table's intrinsic width, which is wider
+       than the scroll viewport, so short values scroll out of sight entirely.
+       overflow:hidden establishes a block formatting context so the float is
+       contained by its own cell. */
+    .spec-table--compare tbody td {
+      display: block;
+      inline-size: auto;
+      padding: var(--space-2) 0;
+      border: none;
+      text-align: end;
+      overflow: hidden;
+    }
+    .spec-table--compare tbody td + td {
+      border-block-start: var(--hairline) solid var(--border-subtle);
+    }
+    .spec-table--compare tbody td::before {
+      content: attr(data-col);
+      float: inline-start;
+      max-inline-size: 45%;
+      margin-inline-end: var(--space-4);
+      font-family: var(--font-body);
+      font-size: var(--text-caption);
+      font-weight: var(--weight-medium);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text-muted);
+      text-align: start;
+    }
+
+    /* Nothing should scroll sideways once the table is stacked. */
+    .spec__scroll:has(.spec-table--compare) { overflow-x: visible; }
+    .spec-table--compare tbody td .spec-alt { text-align: end; }
+
+    .spec-table--compare tbody tr.spec-group { padding-block: 0; }
+    .spec-table--compare tbody tr.spec-group th {
+      inline-size: 100%;
+      padding-block: var(--space-6) var(--space-2);
+      color: var(--text-accent);
+    }
+  }
+
+  /* ------------------------------------------------------------------------
+     Stat strip — the deck's headline numbers, mono at display size.
+     ------------------------------------------------------------------------ */
+
+  .stat-strip {
+    display: grid;
+    gap: 0;
+    grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+    border-block-start: var(--hairline) solid var(--border-hairline);
+  }
+  .stat {
+    padding: var(--space-6) var(--space-5);
+    border-block-end: var(--hairline) solid var(--border-hairline);
+    border-inline-end: var(--hairline) solid var(--border-hairline);
+  }
+  .stat:last-child { border-inline-end: none; }
+
+  .stat__value {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: clamp(2rem, 1.4rem + 2.2vw, 3rem);
+    font-weight: var(--weight-medium);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+  }
+  .stat__unit {
+    font-size: 0.5em;
+    font-weight: var(--weight-regular);
+    color: var(--text-muted);
+    margin-inline-start: 0.25em;
+    letter-spacing: 0;
+  }
+  .stat__label {
+    display: block;
+    margin-block-start: var(--space-3);
+    font-size: var(--text-caption);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+  }
+  .stat__note {
+    display: block;
+    margin-block-start: var(--space-2);
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    color: var(--text-muted);
+  }
+
+  .stat-strip--on-brand { border-block-start-color: var(--border-on-brand); }
+  .stat-strip--on-brand .stat {
+    border-block-end-color: var(--border-on-brand);
+    border-inline-end-color: var(--border-on-brand);
+  }
+  .stat-strip--on-brand .stat__value { color: var(--text-on-brand); }
+  .stat-strip--on-brand .stat__label { color: var(--marine-100); }
+  .stat-strip--on-brand .stat__note  { color: var(--marine-200); }
+
+  /* ------------------------------------------------------------------------
+     Feature grid — the deck's key-features row.
+     Mono labels, no icons, until the custom technical set exists.
+     Nothing in Lucide or Phosphor means "watertight bulkhead"; an
+     approximation would be worse than a label.
+     ------------------------------------------------------------------------ */
+
+  .feature-grid {
+    display: grid;
+    gap: var(--hairline);
+    grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+    background-color: var(--border-hairline);
+    border: var(--hairline) solid var(--border-hairline);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+  .feature {
+    background-color: var(--surface-canvas);
+    padding: var(--space-6) var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .feature__index {
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    letter-spacing: 0.1em;
+    color: var(--text-accent);
+  }
+  .feature__title {
+    font-family: var(--font-display);
+    font-size: var(--text-body);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-heading);
+    color: var(--text-primary);
+  }
+  .feature__desc {
+    font-size: var(--text-small);
+    line-height: 1.55;
+    color: var(--text-secondary);
+  }
+
+  /* ------------------------------------------------------------------------
+     Process strip — "how a conversion works", four steps.
+     ------------------------------------------------------------------------ */
+
+  .process {
+    display: grid;
+    gap: var(--gutter);
+    grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+    counter-reset: step;
+  }
+  .process__step {
+    padding-block-start: var(--space-5);
+    border-block-start: 3px solid var(--border-hairline);
+    position: relative;
+  }
+  .process__step::before {
+    counter-increment: step;
+    content: "0" counter(step);
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    letter-spacing: 0.14em;
+    color: var(--text-accent);
+    margin-block-end: var(--space-3);
+  }
+  .process__step::after {
+    content: "";
+    position: absolute;
+    inset-block-start: -3px;
+    inset-inline-start: 0;
+    inline-size: 40px;
+    block-size: 3px;
+    background-color: var(--accent-graphic);
+  }
+  .process__title {
+    font-family: var(--font-display);
+    font-size: var(--text-h5);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-heading);
+    margin-block-end: var(--space-3);
+  }
+  .process__desc {
+    font-size: var(--text-small);
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  /* ------------------------------------------------------------------------
+     Phase card — the three-phase program. Small radius, hairline, no float.
+     ------------------------------------------------------------------------ */
+
+  .phase-card {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--surface-canvas);
+    border: var(--hairline) solid var(--border-hairline);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+  .phase-card__head {
+    padding: var(--space-5);
+    background-color: var(--surface-inverse);
+    color: var(--text-on-brand);
+    border-block-end: 3px solid var(--accent-graphic);
+  }
+  .phase-card__num {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    letter-spacing: 0.14em;
+    color: var(--text-accent-on-dark);
+    margin-block-end: var(--space-2);
+  }
+  .phase-card__title {
+    font-family: var(--font-display);
+    font-size: var(--text-h5);
+    font-weight: var(--weight-semibold);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--text-on-brand);
+  }
+  .phase-card__body {
+    padding: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    flex: 1;
+  }
+  .phase-card__status {
+    margin-block-start: auto;
+    padding-block-start: var(--space-4);
+    border-block-start: var(--hairline) solid var(--border-subtle);
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    color: var(--text-muted);
+  }
+
+  .checklist { display: flex; flex-direction: column; gap: var(--space-3); }
+  .checklist li {
+    display: grid;
+    grid-template-columns: 16px 1fr;
+    gap: var(--space-3);
+    font-size: var(--text-small);
+    line-height: 1.5;
+    color: var(--text-secondary);
+  }
+  .checklist li::before {
+    content: "";
+    inline-size: 10px;
+    block-size: 10px;
+    margin-block-start: 6px;
+    border: 1.5px solid var(--accent-graphic);
+    border-radius: var(--radius-xs);
+  }
+  .checklist--done li::before { background-color: var(--accent-graphic); }
+
+  /* ------------------------------------------------------------------------
+     Timeline — program sequencing.
+     ------------------------------------------------------------------------ */
+
+  .timeline { position: relative; padding-inline-start: var(--space-7); }
+  .timeline::before {
+    content: "";
+    position: absolute;
+    inset-block: 6px 0;
+    inset-inline-start: 5px;
+    inline-size: var(--hairline);
+    background-color: var(--border-hairline);
+  }
+  .timeline__item { position: relative; padding-block-end: var(--space-7); }
+  .timeline__item:last-child { padding-block-end: 0; }
+  .timeline__item::before {
+    content: "";
+    position: absolute;
+    inset-block-start: 6px;
+    inset-inline-start: calc(var(--space-7) * -1);
+    inline-size: 11px;
+    block-size: 11px;
+    border: 2px solid var(--border-strong);
+    background-color: var(--surface-canvas);
+    border-radius: 50%;
+  }
+  .timeline__item[data-state="current"]::before {
+    border-color: var(--accent-graphic);
+    background-color: var(--accent-graphic);
+  }
+  .timeline__item[data-state="done"]::before {
+    border-color: var(--marine-600);
+    background-color: var(--marine-600);
+  }
+  .timeline__date {
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    display: block;
+    margin-block-end: var(--space-2);
+  }
+  .timeline__title {
+    font-family: var(--font-display);
+    font-size: var(--text-h5);
+    font-weight: var(--weight-semibold);
+    margin-block-end: var(--space-2);
+  }
+  .timeline__desc { font-size: var(--text-small); color: var(--text-secondary); line-height: 1.6; }
+
+  /* ------------------------------------------------------------------------
+     Split — image/drawing + text, alternating.
+     ------------------------------------------------------------------------ */
+
+  .split {
+    display: grid;
+    gap: var(--space-7);
+    align-items: center;
+  }
+  @media (min-width: 900px) {
+    .split { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-9); }
+    .split--reverse .split__media { order: 2; }
+  }
+  .split__media {
+    background-color: var(--surface-sunken);
+    border: var(--hairline) solid var(--border-hairline);
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    overflow: hidden;
+  }
+  .split__media--flush { padding: 0; }
+
+  /* ------------------------------------------------------------------------
+     Technical drawing frame. Zoom, not lightbox glamour.
+     ------------------------------------------------------------------------ */
+
+  .drawing {
+    background-color: var(--surface-raised);
+    border: var(--hairline) solid var(--border-hairline);
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
+    position: relative;
+  }
+  .drawing__label {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4);
+    /* overrides the base figcaption top padding — this caption sits first */
+    padding-block: 0 var(--space-4);
+    margin-block-end: var(--space-4);
+    border-block-end: var(--hairline) solid var(--border-hairline);
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+  .drawing__label b { color: var(--text-primary); font-weight: var(--weight-medium); }
+  .drawing__canvas { overflow: hidden; }
+  .drawing svg { inline-size: 100%; block-size: auto; }
+
+  .drawing--zoom .drawing__canvas { cursor: zoom-in; }
+  .drawing--zoom svg { transition: transform var(--dur-slow) var(--ease); transform-origin: center; }
+  .drawing--zoom.is-zoomed .drawing__canvas { cursor: zoom-out; overflow: auto; }
+  .drawing--zoom.is-zoomed svg { transform: scale(1.9); }
+
+  .drawing__note {
+    margin-block-start: var(--space-4);
+    padding-block-start: var(--space-4);
+    border-block-start: var(--hairline) solid var(--border-hairline);
+    font-size: var(--text-caption);
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* Drawing ink defaults — every general arrangement SVG inherits these.
+
+     non-scaling-stroke is the whole trick here. The same drawing appears at
+     ~0.95x on a detail page and ~0.27x inside a vessel card; without it the
+     1-unit stroke resolves to a quarter of a pixel in the card and the whole
+     drawing greys out. With it, stroke-width is read in CSS pixels and a
+     1px line stays a 1px line at any scale. */
+  .ga {
+    --stroke: 1;
+  }
+  .ga :is(.ln, .ln-2, .hid, .dim, .wl, .fill-light, .fill-mid, .fill-white) {
+    vector-effect: non-scaling-stroke;
+  }
+  .ga .ln   { fill: none; stroke: var(--ink-line); stroke-width: var(--stroke); }
+  .ga .ln-2 { fill: none; stroke: var(--ink-line); stroke-width: calc(var(--stroke) * 1.6); }
+  .ga .hid  { fill: none; stroke: var(--ink-hidden); stroke-width: var(--stroke); stroke-dasharray: 5 4; }
+  .ga .dim  { fill: none; stroke: var(--ink-dim); stroke-width: var(--stroke); }
+  .ga .wl   { fill: none; stroke: var(--ink-water); stroke-width: calc(var(--stroke) * 1.2); }
+  .ga .fill-light { fill: var(--grey-50); stroke: var(--ink-line); stroke-width: var(--stroke); }
+  .ga .fill-mid   { fill: var(--grey-100); stroke: var(--ink-line); stroke-width: var(--stroke); }
+  .ga .fill-brand { fill: var(--marine-600); stroke: none; }
+  .ga .fill-accent{ fill: var(--accent-graphic); stroke: none; }
+  .ga .fill-ink   { fill: var(--ink-line); stroke: none; }
+  .ga .fill-white { fill: var(--white); stroke: var(--ink-line); stroke-width: var(--stroke); }
+  .ga text {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.06em;
+    fill: var(--text-secondary);
+  }
+  .ga .callout { fill: var(--ink-callout); }
+  .ga .tag {
+    font-family: var(--font-mono);
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    fill: var(--text-muted);
+  }
+
+  /* A thumbnail of a drawing should not pretend to be a readable drawing.
+     At card scale these labels resolve to 3–4px, which is visual noise rather
+     than information. The card's alt text and its spec list carry the content;
+     the full-size drawing on the detail page carries the labels. */
+  .vessel-card__media .ga text { display: none; }
+
+  /* Diagrams sitting in a split column render at ~0.78x — nudge the type so
+     callouts stay legible without changing the drawings themselves. */
+  .split__media .ga text { font-size: 11px; }
+  .split__media .ga .tag { font-size: 10px; }
+
+  /* ------------------------------------------------------------------------
+     Gallery — 3/4-up, duotone hover, lightbox.
+     ------------------------------------------------------------------------ */
+
+  .gallery {
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  }
+  .gallery__item {
+    position: relative;
+    display: block;
+    padding: 0;
+    border: var(--hairline) solid var(--border-hairline);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background-color: var(--surface-sunken);
+    aspect-ratio: 4 / 3;
+    inline-size: 100%;
+    text-align: start;
+  }
+  .gallery__item svg,
+  .gallery__item img {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+  /* Duotone unifies a mismatched supplied set. No zoom on hover. */
+  .gallery__item::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: var(--marine-600);
+    mix-blend-mode: multiply;
+    opacity: 0;
+    transition: opacity var(--dur-fast) var(--ease);
+    pointer-events: none;
+  }
+  .gallery__item:hover::after,
+  .gallery__item:focus-visible::after { opacity: 0.22; }
+
+  .gallery__caption {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline: 0;
+    padding: var(--space-6) var(--space-4) var(--space-3);
+    background: var(--scrim-brand);
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    letter-spacing: 0.06em;
+    color: var(--white);
+    z-index: 1;
+  }
+
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: var(--gutter);
+    background-color: rgb(13 22 46 / 0.92);
+  }
+  .lightbox[data-open="true"] { display: flex; }
+  .lightbox__frame {
+    max-inline-size: min(1100px, 100%);
+    max-block-size: 88svb;
+    background-color: var(--surface-canvas);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-overlay);
+    overflow: auto;
+    padding: var(--space-5);
+  }
+  .lightbox__close {
+    position: absolute;
+    inset-block-start: var(--space-5);
+    inset-inline-end: var(--space-5);
+    inline-size: 44px;
+    block-size: 44px;
+    display: grid;
+    place-items: center;
+    color: var(--white);
+    border: var(--hairline) solid var(--border-on-brand);
+    border-radius: var(--radius-sm);
+  }
+
+  /* ------------------------------------------------------------------------
+     Compliance badge / pill
+     ------------------------------------------------------------------------ */
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 5px var(--space-3);
+    border: var(--hairline) solid var(--border-hairline);
+    border-radius: var(--radius-xs);
+    background-color: var(--surface-canvas);
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    letter-spacing: 0.06em;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+  .badge::before {
+    content: "";
+    inline-size: 6px;
+    block-size: 6px;
+    background-color: var(--accent-graphic);
+    flex: none;
+  }
+  .badge--on-brand {
+    background-color: transparent;
+    border-color: var(--border-on-brand);
+    color: var(--text-on-brand);
+  }
+  .badge--target {
+    border-color: var(--amber-600);
+    color: var(--text-accent);
+  }
+  .badge--plain::before { display: none; }
+
+  /* Badge as an in-page jump link. */
+  .badge--link {
+    text-decoration: none;
+    transition:
+      border-color var(--dur-fast) var(--ease),
+      background-color var(--dur-fast) var(--ease),
+      color var(--dur-fast) var(--ease);
+  }
+  .badge--link:hover {
+    border-color: var(--border-strong);
+    background-color: var(--surface-sunken);
+    color: var(--text-primary);
+  }
+
+  /* Compliance card — the credibility band. */
+  .compliance-grid {
+    display: grid;
+    gap: var(--gutter);
+    grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+  }
+  .compliance-card {
+    padding: var(--space-5);
+    border: var(--hairline) solid var(--border-hairline);
+    border-radius: var(--radius-md);
+    background-color: var(--surface-canvas);
+  }
+  .compliance-card__code {
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    letter-spacing: 0.1em;
+    color: var(--text-accent);
+    display: block;
+    margin-block-end: var(--space-3);
+  }
+  .compliance-card__title {
+    font-family: var(--font-display);
+    font-size: var(--text-body-lg);
+    font-weight: var(--weight-semibold);
+    margin-block-end: var(--space-3);
+  }
+  .compliance-card__desc { font-size: var(--text-small); color: var(--text-secondary); line-height: 1.6; }
+
+  /* ------------------------------------------------------------------------
+     Notice — the "these are target figures" disclosure. Used a lot.
+     ------------------------------------------------------------------------ */
+
+  .notice {
+    display: grid;
+    grid-template-columns: 3px 1fr;
+    gap: var(--space-4);
+    padding: var(--space-4) var(--space-5) var(--space-4) 0;
+    background-color: var(--surface-sunken);
+    border-radius: var(--radius-xs);
+    overflow: hidden;
+  }
+  .notice::before { content: ""; background-color: var(--accent-graphic); }
+  .notice__body {
+    padding-block: var(--space-1);
+    font-size: var(--text-small);
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+  .notice__body strong { color: var(--text-primary); }
+  .notice--on-brand {
+    background-color: rgb(255 255 255 / 0.08);
+    color: var(--text-on-brand);
+  }
+  .notice--on-brand .notice__body { color: var(--marine-100); }
+  .notice--on-brand .notice__body strong { color: var(--white); }
+
+  /* ------------------------------------------------------------------------
+     Quote block
+     ------------------------------------------------------------------------ */
+
+  .quote {
+    border-inline-start: 3px solid var(--accent-graphic);
+    padding-inline-start: var(--space-6);
+  }
+  .quote__text {
+    font-family: var(--font-display);
+    font-size: var(--text-h4);
+    font-weight: var(--weight-medium);
+    line-height: 1.35;
+    letter-spacing: var(--tracking-heading);
+    text-wrap: balance;
+  }
+  .quote__cite {
+    display: block;
+    margin-block-start: var(--space-4);
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    font-style: normal;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+  }
+
+  /* ------------------------------------------------------------------------
+     Logo wall — placeholders until partners are signed.
+     ------------------------------------------------------------------------ */
+
+  .logo-wall {
+    display: grid;
+    gap: var(--hairline);
+    grid-template-columns: repeat(auto-fit, minmax(min(180px, 50%), 1fr));
+    background-color: var(--border-hairline);
+    border: var(--hairline) solid var(--border-hairline);
+  }
+  .logo-wall__cell {
+    background-color: var(--surface-canvas);
+    min-block-size: 104px;
+    display: grid;
+    place-items: center;
+    padding: var(--space-4);
+    text-align: center;
+  }
+  /* "To be appointed" is real content, not chrome — it has to be readable.
+     grey-400/grey-300 measured 3.12 and 1.88 on white. The placeholder still
+     reads as secondary against navy-900 body text at 17.93. */
+  .logo-wall__name {
+    font-family: var(--font-display);
+    font-size: var(--text-small);
+    font-weight: var(--weight-semibold);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+  .logo-wall__role {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    margin-block-start: var(--space-2);
+    text-transform: none;
+  }
+
+  /* ------------------------------------------------------------------------
+     CTA band
+     ------------------------------------------------------------------------ */
+
+  .cta-band {
+    background-color: var(--surface-brand);
+    color: var(--text-on-brand);
+    padding-block: var(--section-md);
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-band::before {
+    content: "";
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline: 0;
+    block-size: 3px;
+    background: linear-gradient(to bottom,
+      var(--waterline-thin-on-brand) 0 1px,
+      transparent 1px 2px,
+      var(--accent-graphic) 2px 3px);
+  }
+  .cta-band__inner {
+    display: grid;
+    gap: var(--space-7);
+    align-items: center;
+  }
+  @media (min-width: 900px) {
+    .cta-band__inner { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); }
+  }
+  .cta-band h2 { color: var(--text-on-brand); max-inline-size: 18ch; }
+  .cta-band p { color: var(--marine-100); max-inline-size: var(--measure-lead); }
+
+  /* ------------------------------------------------------------------------
+     Download card
+     ------------------------------------------------------------------------ */
+
+  .download-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+    padding: var(--space-5);
+    border: var(--hairline) solid var(--border-hairline);
+    border-radius: var(--radius-md);
+    background-color: var(--surface-canvas);
+    text-decoration: none;
+    color: inherit;
+    transition: border-color var(--dur-fast) var(--ease);
+  }
+  .download-card:hover { border-color: var(--border-strong); color: inherit; }
+  .download-card__icon {
+    flex: none;
+    inline-size: 44px;
+    block-size: 44px;
+    display: grid;
+    place-items: center;
+    border: var(--hairline) solid var(--border-hairline);
+    border-radius: var(--radius-xs);
+    color: var(--marine-600);
+  }
+  .download-card__title {
+    font-family: var(--font-display);
+    font-size: var(--text-body);
+    font-weight: var(--weight-semibold);
+  }
+  .download-card__meta {
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    color: var(--text-muted);
+    margin-block-start: 2px;
+  }
+
+  /* ------------------------------------------------------------------------
+     Tabs — switching vessel type inside a shared spec view.
+     ------------------------------------------------------------------------ */
+
+  .tabs__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    border-block-end: var(--hairline) solid var(--border-hairline);
+    margin-block-end: var(--space-7);
+  }
+  .tab {
+    position: relative;
+    padding: var(--space-4) var(--space-5);
+    font-family: var(--font-display);
+    font-size: var(--text-small);
+    font-weight: var(--weight-medium);
+    color: var(--text-secondary);
+    transition: color var(--dur-fast) var(--ease);
+  }
+  .tab::after {
+    content: "";
+    position: absolute;
+    inset-block-end: -1px;
+    inset-inline: 0;
+    block-size: 2px;
+    background-color: var(--accent-graphic);
+    transform: scaleX(0);
+    transition: transform var(--dur-fast) var(--ease);
+  }
+  .tab:hover { color: var(--text-primary); }
+  .tab[aria-selected="true"] { color: var(--text-primary); font-weight: var(--weight-semibold); }
+  .tab[aria-selected="true"]::after { transform: scaleX(1); }
+  .tab__meta {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    color: var(--text-muted);
+    font-weight: var(--weight-regular);
+    margin-block-start: 2px;
+  }
+  .tabpanel[hidden] { display: none; }
+
+  /* ------------------------------------------------------------------------
+     Accordion — FAQ.
+     ------------------------------------------------------------------------ */
+
+  .accordion { border-block-start: var(--hairline) solid var(--border-hairline); }
+  /* Keeps question rows to a readable width while staying on the page's left
+     edge — a centred prose container would step the whole column inward and
+     break alignment with the hero and section headers above it. */
+  .accordion--measured { max-inline-size: 880px; }
+  .accordion__item { border-block-end: var(--hairline) solid var(--border-hairline); }
+  .accordion__item summary {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-5);
+    padding-block: var(--space-5);
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--font-display);
+    font-size: var(--text-body-lg);
+    font-weight: var(--weight-medium);
+    letter-spacing: var(--tracking-heading);
+  }
+  .accordion__item summary::-webkit-details-marker { display: none; }
+  .accordion__sign {
+    flex: none;
+    position: relative;
+    inline-size: 14px;
+    block-size: 14px;
+    align-self: center;
+  }
+  .accordion__sign::before,
+  .accordion__sign::after {
+    content: "";
+    position: absolute;
+    background-color: var(--accent-graphic);
+    transition: transform var(--dur-fast) var(--ease);
+  }
+  .accordion__sign::before { inset-block-start: 6px; inset-inline: 0; block-size: 2px; }
+  .accordion__sign::after  { inset-inline-start: 6px; inset-block: 0; inline-size: 2px; }
+  .accordion__item[open] .accordion__sign::after { transform: scaleY(0); }
+  .accordion__body {
+    padding-block-end: var(--space-5);
+    max-inline-size: var(--measure-prose);
+    font-size: var(--text-small);
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+  .accordion__body > * + * { margin-block-start: var(--space-3); }
+
+  /* ------------------------------------------------------------------------
+     Form — segmented by buyer type, branching fields.
+     ------------------------------------------------------------------------ */
+
+  .form { display: flex; flex-direction: column; gap: var(--space-6); }
+
+  .field { display: flex; flex-direction: column; gap: var(--space-2); }
+  .field__label {
+    font-size: var(--text-caption);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: var(--weight-medium);
+    color: var(--text-secondary);
+  }
+  .field__hint {
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    color: var(--text-muted);
+  }
+  .field__req { color: var(--text-accent); }
+
+  .input, .textarea, .select {
+    inline-size: 100%;
+    padding: 12px var(--space-4);
+    border: var(--hairline) solid var(--border-strong);
+    border-radius: var(--radius-xs);
+    background-color: var(--surface-canvas);
+    font-size: var(--text-body);
+    color: var(--text-primary);
+    transition: border-color var(--dur-fast) var(--ease);
+  }
+  /* grey-400 measures 3.12 on white — too low for text a user has to read
+     in order to know what the field wants. */
+  .input::placeholder, .textarea::placeholder { color: var(--text-muted); }
+  .input:hover, .textarea:hover, .select:hover { border-color: var(--navy-900); }
+  .textarea { min-block-size: 140px; resize: vertical; }
+
+  .select {
+    appearance: none;
+    background-image:
+      linear-gradient(45deg, transparent 50%, var(--navy-900) 50%),
+      linear-gradient(135deg, var(--navy-900) 50%, transparent 50%);
+    background-position:
+      calc(100% - 20px) calc(50% + 2px),
+      calc(100% - 14px) calc(50% + 2px);
+    background-size: 6px 6px, 6px 6px;
+    background-repeat: no-repeat;
+    padding-inline-end: var(--space-8);
+  }
+
+  /* Segmented buyer-type control. */
+  .segmented {
+    display: grid;
+    gap: var(--space-3);
+    grid-template-columns: repeat(auto-fit, minmax(min(160px, 100%), 1fr));
+  }
+  .segment { position: relative; }
+  .segment input {
+    position: absolute;
+    opacity: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    margin: 0;
+    cursor: pointer;
+  }
+  .segment__face {
+    display: block;
+    padding: var(--space-4);
+    border: var(--hairline) solid var(--border-hairline);
+    border-radius: var(--radius-xs);
+    background-color: var(--surface-canvas);
+    transition: border-color var(--dur-fast) var(--ease), background-color var(--dur-fast) var(--ease);
+  }
+  .segment input:hover + .segment__face { border-color: var(--border-strong); }
+  .segment input:checked + .segment__face {
+    border-color: var(--marine-600);
+    background-color: var(--marine-50);
+  }
+  .segment input:focus-visible + .segment__face { box-shadow: var(--focus-ring); }
+  .segment__title {
+    display: block;
+    font-family: var(--font-display);
+    font-size: var(--text-small);
+    font-weight: var(--weight-semibold);
+  }
+  .segment__desc {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    color: var(--text-muted);
+    margin-block-start: var(--space-2);
+    line-height: 1.4;
+  }
+
+  .field-group {
+    padding: var(--space-5);
+    border: var(--hairline) solid var(--border-hairline);
+    border-left: 3px solid var(--accent-graphic);
+    border-radius: var(--radius-xs);
+    background-color: var(--surface-sunken);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+  .field-group[hidden] { display: none; }
+  .field-group__legend {
+    font-family: var(--font-display);
+    font-size: var(--text-small);
+    font-weight: var(--weight-semibold);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+  }
+
+  .field-row {
+    display: grid;
+    gap: var(--space-5);
+    grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+  }
+
+  .form__status {
+    padding: var(--space-4) var(--space-5);
+    border: var(--hairline) solid var(--marine-200);
+    background-color: var(--marine-50);
+    border-radius: var(--radius-xs);
+    font-size: var(--text-small);
+    color: var(--marine-900);
+  }
+  .form__status[hidden] { display: none; }
+
+  /* ------------------------------------------------------------------------
+     Breadcrumb
+     ------------------------------------------------------------------------ */
+
+  .breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+  }
+  .breadcrumb a { color: inherit; text-decoration: none; }
+  .breadcrumb a:hover { color: var(--text-primary); text-decoration: underline; }
+  .breadcrumb li + li::before { content: "/"; margin-inline-end: var(--space-2); color: var(--grey-300); }
+  /* The reset only strips markers from ul[class]/ol[class]; this <ol> carries
+     no class of its own, so it needs stripping here or it renders "1. 2. 3.". */
+  .breadcrumb ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: 0;
+    padding-inline-start: 0;
+    list-style: none;
+  }
+  .breadcrumb--on-brand { color: var(--marine-200); }
+  .breadcrumb--on-brand a:hover { color: var(--white); }
+  .breadcrumb--on-brand li + li::before { color: rgb(255 255 255 / 0.4); }
+
+  /* ------------------------------------------------------------------------
+     Footer
+     ------------------------------------------------------------------------ */
+
+  .site-footer {
+    background-color: var(--surface-inverse);
+    color: var(--marine-100);
+    padding-block: var(--section-md) var(--space-7);
+  }
+  .site-footer a { color: var(--marine-100); text-decoration: none; }
+  .site-footer a:hover { color: var(--white); text-decoration: underline; }
+
+  .footer-grid {
+    display: grid;
+    gap: var(--space-7);
+    grid-template-columns: repeat(auto-fit, minmax(min(190px, 100%), 1fr));
+  }
+  .footer-grid__brand { grid-column: 1 / -1; }
+  @media (min-width: 900px) {
+    .footer-grid { grid-template-columns: 1.6fr repeat(3, 1fr); }
+    .footer-grid__brand { grid-column: auto; }
+  }
+  .footer__heading {
+    font-family: var(--font-display);
+    font-size: var(--text-caption);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-eyebrow);
+    color: var(--text-accent-on-dark);
+    margin-block-end: var(--space-4);
+  }
+  .footer__list { display: flex; flex-direction: column; gap: var(--space-3); font-size: var(--text-small); }
+
+  .footer__compliance {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    padding-block: var(--space-6);
+    margin-block: var(--space-8) var(--space-6);
+    border-block: var(--hairline) solid var(--border-on-brand);
+  }
+
+  .footer__legal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4) var(--space-6);
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    color: var(--marine-200);
+    letter-spacing: 0.04em;
+  }
+
+  /* ------------------------------------------------------------------------
+     Use-case list
+     ------------------------------------------------------------------------ */
+
+  .use-cases {
+    display: grid;
+    gap: var(--gutter);
+    grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  }
+  .use-case {
+    padding-block-start: var(--space-4);
+    border-block-start: var(--hairline) solid var(--waterline-thick);
+  }
+  .use-case__title {
+    font-family: var(--font-display);
+    font-size: var(--text-body-lg);
+    font-weight: var(--weight-semibold);
+    margin-block-end: var(--space-3);
+  }
+  .use-case__desc { font-size: var(--text-small); line-height: 1.6; color: var(--text-secondary); }
+
+  /* ------------------------------------------------------------------------
+     Data list — key/value pairs outside a table context.
+     ------------------------------------------------------------------------ */
+
+  .datalist { border-block-start: var(--hairline) solid var(--border-hairline); }
+  .datalist__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding-block: var(--space-4);
+    border-block-end: var(--hairline) solid var(--border-hairline);
+  }
+  .datalist__key {
+    font-size: var(--text-caption);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--text-secondary);
+  }
+  .datalist__val {
+    font-family: var(--font-mono);
+    font-size: var(--text-small);
+    font-weight: var(--weight-medium);
+    color: var(--text-primary);
+    text-align: end;
+  }
+}
+
+/* ==========================================================================
+   UTILITIES
+   ========================================================================== */
+
+@layer utilities {
+
+  .visually-hidden {
+    position: absolute !important;
+    inline-size: 1px; block-size: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden; clip-path: inset(50%);
+    white-space: nowrap; border: 0;
+  }
+
+  .text-center { text-align: center; }
+  .text-end { text-align: end; }
+  .mono {
+    font-family: var(--font-mono);
+    letter-spacing: var(--tracking-mono);
+    font-variant-numeric: tabular-nums;
+  }
+  .muted { color: var(--text-secondary); }
+  .accent { color: var(--text-accent); }
+  .lead {
+    font-size: var(--text-body-lg);
+    line-height: var(--leading-body-lg);
+    max-inline-size: var(--measure-lead);
+    color: var(--text-secondary);
+  }
+  .nowrap { white-space: nowrap; }
+
+  .mt-0 { margin-block-start: 0; }
+  .mt-3 { margin-block-start: var(--space-3); }
+  .mt-4 { margin-block-start: var(--space-4); }
+  .mt-5 { margin-block-start: var(--space-5); }
+  .mt-6 { margin-block-start: var(--space-6); }
+  .mt-7 { margin-block-start: var(--space-7); }
+  .mt-8 { margin-block-start: var(--space-8); }
+  .mb-5 { margin-block-end: var(--space-5); }
+  .mb-6 { margin-block-end: var(--space-6); }
+  .mb-7 { margin-block-end: var(--space-7); }
+  .mb-8 { margin-block-end: var(--space-8); }
+
+  /* Reveal on scroll — 12px rise plus opacity. Nothing more. */
+  .reveal {
+    opacity: 0;
+    transform: translateY(12px);
+    transition:
+      opacity var(--dur-mid) var(--ease),
+      transform var(--dur-mid) var(--ease);
+  }
+  .reveal.is-visible { opacity: 1; transform: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { transform: none; }
+    .reveal.is-visible { transform: none; }
+  }
+
+  /* Fallback if JS is off — never leave content invisible. */
+  .no-js .reveal { opacity: 1; transform: none; }
+}

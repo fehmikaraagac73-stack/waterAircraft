@@ -1,0 +1,271 @@
+/* ==========================================================================
+   ANUNNAKI — Design Tokens
+   --------------------------------------------------------------------------
+   Two layers, in order:
+     1. PRIMITIVES  — raw values. Never consumed directly by a component.
+     2. SEMANTICS   — role-named aliases. This is what components read.
+
+   If you find yourself writing var(--marine-600) inside a component rule,
+   the semantic layer is missing a token. Add it there instead.
+   ========================================================================== */
+
+@layer tokens {
+
+  :root {
+
+    /* ----------------------------------------------------------------------
+       1. PRIMITIVES — COLOR
+       Greys are deliberately blue-tinted. Neutral greys go muddy sitting
+       next to a saturated marine field.
+       ---------------------------------------------------------------------- */
+
+    /* Marine ramp — the single blue. Replaces the deck's cobalt + navy split. */
+    --marine-50:  #EEF4FB;
+    --marine-100: #D7E5F5;
+    --marine-200: #B8CFEC;   /* lightened from #AFC9EA: the original sat at 4.50
+                                on marine-600 — passing with zero margin, which
+                                is not a margin. Now 4.80. */
+    --marine-300: #7FA8DB;
+    --marine-400: #4B84C7;
+    --marine-500: #2A66AE;
+    --marine-600: #17539B;   /* brand field */
+    --marine-700: #124580;
+    --marine-800: #0F3966;
+    --marine-900: #0C2C4E;
+
+    /* Navy — text and dark surfaces. */
+    --navy-700: #1B2A56;
+    --navy-800: #142042;
+    --navy-900: #0D162E;
+
+    /* Amber — absorbs both the logo orange and the hull stripe yellow. */
+    --amber-400: #FFA733;   /* graphic on dark: 9.24 on navy-900, 3.94 on marine-600 */
+    --amber-500: #F5851F;   /* GRAPHIC ONLY — 2.54 on white. Never text, never a border
+                               that carries meaning on a light surface. */
+    --amber-600: #AD5905;   /* the text-safe accent. Darkened from #C96806, which measured
+                               3.84 on white and 3.54 on grey-50 — both under 4.5, and every
+                               place this token is used (eyebrows, spec group labels, compliance
+                               codes) is small text. Now 4.99 / 4.60. */
+
+    /* Blue-tinted greys. */
+    --grey-25:  #FAFBFD;
+    --grey-50:  #F3F6FA;
+    --grey-100: #E6EBF2;
+    --grey-200: #D2DAE6;
+    --grey-300: #B3BECE;
+    --grey-400: #8593A8;   /* borders and disabled marks only — 3.12 on white, not text */
+    --grey-500: #637289;   /* darkened from #64748B: captions and hints land on grey-50 as
+                              often as on white, and it measured 4.39 there. Now 4.51. */
+    --grey-600: #48566B;
+
+    --white: #FFFFFF;
+
+    /* ----------------------------------------------------------------------
+       2. PRIMITIVES — TYPE
+       Display: Archivo (variable, width axis) — matches the logotype's wide,
+                flat-terminal geometry. The width axis is why headings can
+                echo the logo tracking without faking it with letter-spacing.
+       Body:    IBM Plex Sans — technical-document register.
+       Data:    IBM Plex Mono — spec values, registration marks, dimensions.
+       ---------------------------------------------------------------------- */
+
+    --font-display: "Archivo", "Archivo Expanded", "Helvetica Neue", Arial, sans-serif;
+    --font-body:    "IBM Plex Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --font-mono:    "IBM Plex Mono", "Cascadia Mono", Consolas, "Courier New", monospace;
+
+    /* Fluid scale. Ratios tuned so h2 and h1 never collide at 900–1100px. */
+    --text-caption:  0.75rem;                                        /* 12 */
+    --text-small:    0.875rem;                                       /* 14 */
+    --text-body:     1rem;                                           /* 16 */
+    --text-body-lg:  1.125rem;                                       /* 18 */
+    --text-h5:       1.25rem;                                        /* 20 */
+    --text-h4:       clamp(1.375rem, 1.2rem + 0.55vw, 1.75rem);
+    --text-h3:       clamp(1.75rem,  1.5rem + 0.90vw, 2.25rem);
+    --text-h2:       clamp(2.25rem,  1.8rem + 1.60vw, 3rem);
+    --text-h1:       clamp(2.75rem,  2.0rem + 2.60vw, 4.25rem);
+    --text-display:  clamp(3.5rem,   2.4rem + 4.00vw, 6rem);
+
+    /* Unitless ratios, NOT pixel values. The scale was specified as
+       size/leading pairs (body 16/26, body-lg 18/30, caption 12/16,
+       small 14/20); these are those pairs resolved to ratios so they can be
+       consumed by line-height directly. Storing them as px and dividing in a
+       calc() silently yields a *length* — calc(26px / 16) is 1.625px, which
+       collapses every paragraph onto a single baseline. */
+    --leading-caption: 1.3333;   /* 16 / 12 */
+    --leading-small:   1.4286;   /* 20 / 14 */
+    --leading-body:    1.625;    /* 26 / 16 */
+    --leading-body-lg: 1.6667;   /* 30 / 18 */
+    --leading-tight:   1.08;
+    --leading-heading: 1.16;
+
+    --tracking-display: -0.02em;
+    --tracking-heading: -0.01em;
+    --tracking-eyebrow: 0.16em;
+    --tracking-mono:    0.01em;
+
+    --weight-regular:  400;
+    --weight-medium:   500;
+    --weight-semibold: 600;
+    --weight-bold:     700;
+
+    /* Archivo's width axis. This is how headings echo the logotype's wide,
+       flat-terminal geometry — widening the letterforms themselves rather
+       than faking it by pushing letter-spacing on a normal-width face.
+       Degrades harmlessly: a static fallback face ignores font-stretch. */
+    --width-normal:  100%;
+    --width-wide:    112%;
+    --width-widest:  118%;
+
+    /* Measure caps. */
+    --measure-prose: 68ch;
+    --measure-lead:  46ch;
+
+    /* ----------------------------------------------------------------------
+       3. PRIMITIVES — SPACE
+       4px base. Section padding is one of three values so vertical rhythm
+       stays legible across templates.
+       ---------------------------------------------------------------------- */
+
+    --space-1:  4px;
+    --space-2:  8px;
+    --space-3:  12px;
+    --space-4:  16px;
+    --space-5:  24px;
+    --space-6:  32px;
+    --space-7:  48px;
+    --space-8:  64px;
+    --space-9:  96px;
+    --space-10: 128px;
+    --space-11: 160px;
+
+    --section-sm: var(--space-8);   /* 64  */
+    --section-md: var(--space-9);   /* 96  */
+    --section-lg: var(--space-11);  /* 160 */
+
+    /* ----------------------------------------------------------------------
+       4. PRIMITIVES — LAYOUT
+       ---------------------------------------------------------------------- */
+
+    --content-max: 1280px;
+    --wide-max:    1440px;   /* spec tables, full-width galleries */
+    --gutter:      24px;
+    --columns:     12;
+    --header-h:    72px;
+
+    /* ----------------------------------------------------------------------
+       5. PRIMITIVES — SHAPE / DEPTH / MOTION
+       Radii stay small. Rounded corners read consumer-app, and this
+       audience includes port authorities.
+       Depth comes from hairlines. Technical documents do not float.
+       ---------------------------------------------------------------------- */
+
+    --radius-xs: 2px;   /* inputs, badges */
+    --radius-sm: 4px;   /* buttons */
+    --radius-md: 8px;   /* cards */
+    --radius-lg: 12px;  /* modals, largest media containers */
+
+    --hairline: 1px;
+
+    /* The only two shadows in the system. */
+    --shadow-overlay: 0 12px 32px -8px rgb(13 22 46 / 0.24),
+                      0 2px 6px -2px rgb(13 22 46 / 0.12);
+    --shadow-sticky:  0 1px 0 0 var(--grey-200),
+                      0 6px 20px -12px rgb(13 22 46 / 0.28);
+
+    --ease: cubic-bezier(0.2, 0, 0, 1);
+    --dur-fast:   150ms;  /* hover, focus */
+    --dur-mid:    250ms;  /* reveals */
+    --dur-slow:   400ms;  /* full-width movement */
+
+    /* ----------------------------------------------------------------------
+       6. SEMANTIC LAYER — the only tokens components should consume.
+       ---------------------------------------------------------------------- */
+
+    /* Surfaces — exactly four section backgrounds. Any more and the page
+       stops reading as documentation. */
+    --surface-canvas:  var(--white);
+    --surface-sunken:  var(--grey-50);
+    --surface-raised:  var(--grey-25);
+    --surface-brand:   var(--marine-600);
+    --surface-brand-deep: var(--marine-800);
+    --surface-inverse: var(--navy-900);
+
+    /* Text */
+    --text-primary:    var(--navy-900);
+    --text-secondary:  var(--grey-600);
+    --text-muted:      var(--grey-500);
+    --text-on-brand:   var(--white);
+    --text-on-brand-dim: var(--marine-100);
+    --text-accent:     var(--amber-600);
+    --text-accent-on-dark: var(--amber-400);
+    --text-link:       var(--marine-700);
+    --text-link-hover: var(--marine-900);
+
+    /* Borders */
+    --border-hairline:  var(--grey-200);
+    --border-subtle:    var(--grey-100);
+    --border-strong:    var(--grey-400);
+    --border-on-brand:  rgb(255 255 255 / 0.24);
+    --border-on-brand-strong: rgb(255 255 255 / 0.44);
+
+    /* Graphic accents — never text at body size. */
+    --accent-graphic:   var(--amber-500);
+    --accent-graphic-hi: var(--amber-400);
+
+    /* The waterline motif: thin over thick, like a hull stripe. */
+    --waterline-thin:  var(--grey-300);
+    --waterline-thick: var(--navy-900);
+    --waterline-thin-on-brand:  rgb(255 255 255 / 0.35);
+    --waterline-thick-on-brand: var(--accent-graphic);
+
+    /* Focus. Two-tone so one ring survives every section background without
+       ever being overridden per section.
+
+       The outer tone is navy, not white. An amber-inner/white-outer ring was
+       the intent, but measured: amber-500 is 2.54 on white and amber-600 is
+       1.99 on marine-600 — no single amber clears 3:1 on both, and a white
+       outer ring is invisible on the white page where the amber already fails.
+       Amber inner + navy outer means at least one tone always clears 3:1:
+
+         on white       amber 2.54 / navy 17.93
+         on grey-50     amber 2.35 / navy 16.54
+         on marine-600  amber 3.01 / navy  2.35
+         on navy-900    amber 7.05 / navy  1.00                                */
+    --focus-inner: var(--amber-500);
+    --focus-outer: var(--navy-900);
+    --focus-ring: 0 0 0 2px var(--focus-inner), 0 0 0 5px var(--focus-outer);
+    --focus-ring-inset: inset 0 0 0 2px var(--focus-inner), inset 0 0 0 5px var(--focus-outer);
+
+    /* Scrim under text laid over renders. */
+    --scrim-brand: linear-gradient(
+      to top,
+      rgb(12 44 78 / 0.92) 0%,
+      rgb(12 44 78 / 0.72) 38%,
+      rgb(12 44 78 / 0.28) 70%,
+      rgb(12 44 78 / 0.10) 100%
+    );
+    /* Composites on top of --scrim-brand, so its values are tuned for the
+       pair rather than for use alone — hence the early falloff. */
+    --scrim-brand-side: linear-gradient(
+      to right,
+      rgb(12 44 78 / 0.82) 0%,
+      rgb(12 44 78 / 0.62) 34%,
+      rgb(12 44 78 / 0.14) 62%,
+      rgb(12 44 78 / 0) 100%
+    );
+
+    /* Technical drawing ink — 1px stroke, navy, on white or grey-25. */
+    --ink-line:   var(--navy-900);
+    --ink-hidden: var(--grey-400);
+    --ink-dim:    var(--grey-400);   /* dimension lines carry information, so they get
+                                        grey-400 rather than the grey-300 a purely
+                                        decorative construction line would take */
+    --ink-callout: var(--marine-600);
+    --ink-water:  var(--marine-400);
+  }
+
+  /* Larger gutter above the mid breakpoint. */
+  @media (min-width: 768px) {
+    :root { --gutter: 32px; --header-h: 80px; }
+  }
+}
