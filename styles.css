@@ -126,7 +126,7 @@
   }
 
   code, kbd, samp {
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: 0.92em;
   }
 
@@ -137,11 +137,11 @@
 
   figure { margin: 0; }
   figcaption {
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: var(--text-caption);
     line-height: var(--leading-caption);
     color: var(--text-muted);
-    letter-spacing: var(--tracking-mono);
+    letter-spacing: var(--tracking-data);
     padding-block-start: var(--space-3);
   }
 }
@@ -368,6 +368,22 @@
   .site-header.is-scrolled .nav__link { color: var(--text-primary); }
   .site-header.is-scrolled .nav-toggle__bar { background-color: var(--text-primary); }
 
+  /* Drawer open at scroll 0: the drawer is an opaque canvas panel starting
+     directly below the header, so the transparent over-hero treatment would
+     leave the white logotype and toggle bars on a white field — invisible.
+     Take the solid state for as long as the drawer is open. */
+  .site-header[data-over-hero="true"]:has(~ [data-drawer][data-open="true"]) {
+    background-color: var(--surface-canvas);
+    border-block-end-color: var(--border-hairline);
+    color: var(--text-primary);
+  }
+  .site-header[data-over-hero="true"]:has(~ [data-drawer][data-open="true"]) .nav__link {
+    color: var(--text-primary);
+  }
+  .site-header[data-over-hero="true"]:has(~ [data-drawer][data-open="true"]) .nav-toggle__bar {
+    background-color: var(--text-primary);
+  }
+
   .site-header__inner {
     inline-size: 100%;
     max-inline-size: var(--wide-max);
@@ -495,7 +511,7 @@
   }
   .nav__menu-link .nav__menu-meta {
     display: block;
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: var(--text-caption);
     color: var(--text-muted);
     margin-block-start: 2px;
@@ -559,10 +575,10 @@
     color: var(--text-primary);
   }
   .drawer__link .drawer__meta {
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: var(--text-caption);
     color: var(--text-muted);
-    letter-spacing: var(--tracking-mono);
+    letter-spacing: var(--tracking-data);
   }
   .drawer__link[aria-current="page"] { color: var(--text-accent); }
   .drawer__group-label {
@@ -684,6 +700,15 @@
   }
   .section-header--center .section-header__lead { margin-inline: auto; }
 
+  /* The layout layer already colors paragraphs on brand/inverse sections, but
+     `components` lands after `layout` in the layer order, so these two rules
+     would otherwise win and drop grey-600 body text onto a marine field
+     (1.6:1). Restated at component level so the intent survives the cascade.
+     This is what the per-page `style="color: var(--marine-100)"` overrides
+     were compensating for; they are now redundant. */
+  .section--brand :is(.section-header__lead, .prose),
+  .section--inverse :is(.section-header__lead, .prose) { color: var(--text-on-brand-dim); }
+
   .prose { max-inline-size: var(--measure-prose); color: var(--text-secondary); }
   .prose > * + * { margin-block-start: var(--space-4); }
   .prose :is(h2,h3,h4) { color: var(--text-primary); margin-block-start: var(--space-7); }
@@ -740,13 +765,13 @@
   }
   .hero__actions { margin-block-start: var(--space-7); }
 
-  /* Registration mark, mono, bottom-right of a bleed hero. */
+  /* Registration mark, bottom-right of a bleed hero. */
   .hero__reg {
     position: absolute;
     inset-block-end: var(--space-6);
     inset-inline-end: var(--gutter);
     z-index: 2;
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: var(--text-caption);
     letter-spacing: 0.12em;
     color: rgb(255 255 255 / 0.7);
@@ -781,18 +806,26 @@
     padding: var(--space-6);
   }
 
-  /* (c) Title block: secondary pages. Marine field, no imagery.
-     The header on these pages is sticky and therefore occupies flow space,
-     so this does NOT need to reserve a header height on top. */
+  /* (c) Title block: secondary pages. Same marine-900 field as the bleed hero
+     on the home page, so the top of every page reads as one surface — no
+     imagery, no scrim.
+     The header on these pages is fixed and transparent (data-over-hero), so it
+     occupies NO flow space and the hero has to reserve a header height on top
+     itself. Without that the breadcrumb sits under the nav. */
   .hero--title {
-    background-color: var(--surface-brand);
+    background-color: var(--marine-900);
     color: var(--text-on-brand);
-    padding-block: var(--space-9);
+    padding-block: calc(var(--header-h) + var(--space-9)) var(--space-9);
     position: relative;
     overflow: hidden;
   }
   .hero--title h1 { color: var(--text-on-brand); max-inline-size: 20ch; }
   .hero--title .hero__lead { color: var(--marine-100); }
+  /* Amber eyebrow, matching the home hero. Scoped to the hero on purpose: the
+     markup says .eyebrow--on-brand (marine-200, tuned for the marine-600 CTA
+     bands), and amber-400 measures 3.94 on marine-600 — too low for text there.
+     On this marine-900 field it measures 9.24, so it is only safe in here. */
+  .hero--title .eyebrow { color: var(--text-accent-on-dark); }
   /* Faint hull-stripe field, drawn not decorated. */
   .hero--title::after {
     content: "";
@@ -846,7 +879,7 @@
     position: absolute;
     inset-block-start: var(--space-3);
     inset-inline-start: var(--space-3);
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: var(--text-caption);
     letter-spacing: 0.08em;
     padding: 3px var(--space-2);
@@ -900,7 +933,7 @@
   }
   .vessel-card__spec dd {
     margin: 2px 0 0;
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: var(--text-small);
     font-weight: var(--weight-medium);
     color: var(--text-primary);
@@ -950,9 +983,9 @@
   .spec-table caption {
     text-align: start;
     padding-block-end: var(--space-4);
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: var(--text-caption);
-    letter-spacing: var(--tracking-mono);
+    letter-spacing: var(--tracking-data);
     color: var(--text-muted);
   }
 
@@ -984,10 +1017,10 @@
   }
   .spec-table thead th .spec-table__sub {
     display: block;
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: var(--text-caption);
     font-weight: var(--weight-regular);
-    letter-spacing: var(--tracking-mono);
+    letter-spacing: var(--tracking-data);
     color: var(--text-muted);
     margin-block-start: 2px;
     text-transform: none;
@@ -1004,14 +1037,16 @@
     color: var(--text-secondary);
   }
 
-  /* Values: mono, end-aligned. Metric primary, imperial muted below. */
+  /* Values: end-aligned. Metric primary, imperial muted below. The digit
+     columns line up on the tabular-nums inherited from body — the face here
+     is proportional, so that is what carries the alignment. */
   .spec-table td {
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: var(--text-small);
     font-weight: var(--weight-medium);
     color: var(--text-primary);
     text-align: end;
-    letter-spacing: var(--tracking-mono);
+    letter-spacing: var(--tracking-data);
   }
   .spec-table--compare td { text-align: end; }
 
@@ -1046,7 +1081,7 @@
   }
   .unit-toggle__btn {
     padding: var(--space-2) var(--space-4);
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: var(--text-caption);
     letter-spacing: 0.08em;
     color: var(--text-secondary);
@@ -1170,7 +1205,7 @@
   }
 
   /* ------------------------------------------------------------------------
-     Stat strip — the deck's headline numbers, mono at display size.
+     Stat strip — the deck's headline numbers, at display size.
      ------------------------------------------------------------------------ */
 
   .stat-strip {
@@ -1188,7 +1223,7 @@
 
   .stat__value {
     display: block;
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: clamp(2rem, 1.4rem + 2.2vw, 3rem);
     font-weight: var(--weight-medium);
     line-height: 1.05;
@@ -1213,7 +1248,7 @@
   .stat__note {
     display: block;
     margin-block-start: var(--space-2);
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: var(--text-caption);
     color: var(--text-muted);
   }
@@ -1229,7 +1264,7 @@
 
   /* ------------------------------------------------------------------------
      Feature grid — the deck's key-features row.
-     Mono labels, no icons, until the custom technical set exists.
+     Text labels, no icons, until the custom technical set exists.
      Nothing in Lucide or Phosphor means "watertight bulkhead"; an
      approximation would be worse than a label.
      ------------------------------------------------------------------------ */
@@ -1251,7 +1286,7 @@
     gap: var(--space-3);
   }
   .feature__index {
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: var(--text-caption);
     letter-spacing: 0.1em;
     color: var(--text-accent);
@@ -1288,7 +1323,7 @@
     counter-increment: step;
     content: "0" counter(step);
     display: block;
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: var(--text-caption);
     letter-spacing: 0.14em;
     color: var(--text-accent);
@@ -1336,7 +1371,7 @@
   }
   .phase-card__num {
     display: block;
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: var(--text-caption);
     letter-spacing: 0.14em;
     color: var(--text-accent-on-dark);
@@ -1357,29 +1392,43 @@
     gap: var(--space-4);
     flex: 1;
   }
+  /* Intro line above a phase checklist. Was borrowing .vessel-card__desc;
+     given its own name so the two components can diverge. */
+  .phase-card__intro {
+    font-size: var(--text-small);
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
   .phase-card__status {
     margin-block-start: auto;
     padding-block-start: var(--space-4);
     border-block-start: var(--hairline) solid var(--border-subtle);
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: var(--text-caption);
     color: var(--text-muted);
   }
 
   .checklist { display: flex; flex-direction: column; gap: var(--space-3); }
+  /* The marker is absolutely positioned rather than a grid column. A grid
+     `li` turns every inline child into a separate grid item, so an item like
+     `<strong>Label</strong> — detail` pushed the trailing text node into an
+     implicit third track with no width and wrapped it one word per line.
+     Normal flow here means any mix of inline content lays out correctly. */
   .checklist li {
-    display: grid;
-    grid-template-columns: 16px 1fr;
-    gap: var(--space-3);
+    position: relative;
+    padding-inline-start: calc(16px + var(--space-3));
     font-size: var(--text-small);
     line-height: 1.5;
     color: var(--text-secondary);
   }
   .checklist li::before {
     content: "";
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block-start: 6px;
     inline-size: 10px;
     block-size: 10px;
-    margin-block-start: 6px;
     border: 1.5px solid var(--accent-graphic);
     border-radius: var(--radius-xs);
   }
@@ -1420,7 +1469,7 @@
     background-color: var(--marine-600);
   }
   .timeline__date {
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: var(--text-caption);
     letter-spacing: 0.08em;
     color: var(--text-muted);
@@ -1477,7 +1526,7 @@
     padding-block: 0 var(--space-4);
     margin-block-end: var(--space-4);
     border-block-end: var(--hairline) solid var(--border-hairline);
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: var(--text-caption);
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -1526,14 +1575,14 @@
   .ga .fill-ink   { fill: var(--ink-line); stroke: none; }
   .ga .fill-white { fill: var(--white); stroke: var(--ink-line); stroke-width: var(--stroke); }
   .ga text {
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: 9px;
     letter-spacing: 0.06em;
     fill: var(--text-secondary);
   }
   .ga .callout { fill: var(--ink-callout); }
   .ga .tag {
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: 8px;
     letter-spacing: 0.1em;
     fill: var(--text-muted);
@@ -1549,60 +1598,6 @@
      callouts stay legible without changing the drawings themselves. */
   .split__media .ga text { font-size: 11px; }
   .split__media .ga .tag { font-size: 10px; }
-
-  /* ------------------------------------------------------------------------
-     Gallery — 3/4-up, duotone hover, lightbox.
-     ------------------------------------------------------------------------ */
-
-  .gallery {
-    display: grid;
-    gap: var(--space-4);
-    grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
-  }
-  .gallery__item {
-    position: relative;
-    display: block;
-    padding: 0;
-    border: var(--hairline) solid var(--border-hairline);
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    background-color: var(--surface-sunken);
-    aspect-ratio: 4 / 3;
-    inline-size: 100%;
-    text-align: start;
-  }
-  .gallery__item svg,
-  .gallery__item img {
-    inline-size: 100%;
-    block-size: 100%;
-    object-fit: cover;
-  }
-  /* Duotone unifies a mismatched supplied set. No zoom on hover. */
-  .gallery__item::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-color: var(--marine-600);
-    mix-blend-mode: multiply;
-    opacity: 0;
-    transition: opacity var(--dur-fast) var(--ease);
-    pointer-events: none;
-  }
-  .gallery__item:hover::after,
-  .gallery__item:focus-visible::after { opacity: 0.22; }
-
-  .gallery__caption {
-    position: absolute;
-    inset-block-end: 0;
-    inset-inline: 0;
-    padding: var(--space-6) var(--space-4) var(--space-3);
-    background: var(--scrim-brand);
-    font-family: var(--font-mono);
-    font-size: var(--text-caption);
-    letter-spacing: 0.06em;
-    color: var(--white);
-    z-index: 1;
-  }
 
   .lightbox {
     position: fixed;
@@ -1649,7 +1644,7 @@
     border: var(--hairline) solid var(--border-hairline);
     border-radius: var(--radius-xs);
     background-color: var(--surface-canvas);
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: var(--text-caption);
     letter-spacing: 0.06em;
     color: var(--text-secondary);
@@ -1700,7 +1695,7 @@
     background-color: var(--surface-canvas);
   }
   .compliance-card__code {
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: var(--text-caption);
     letter-spacing: 0.1em;
     color: var(--text-accent);
@@ -1744,32 +1739,6 @@
   .notice--on-brand .notice__body strong { color: var(--white); }
 
   /* ------------------------------------------------------------------------
-     Quote block
-     ------------------------------------------------------------------------ */
-
-  .quote {
-    border-inline-start: 3px solid var(--accent-graphic);
-    padding-inline-start: var(--space-6);
-  }
-  .quote__text {
-    font-family: var(--font-display);
-    font-size: var(--text-h4);
-    font-weight: var(--weight-medium);
-    line-height: 1.35;
-    letter-spacing: var(--tracking-heading);
-    text-wrap: balance;
-  }
-  .quote__cite {
-    display: block;
-    margin-block-start: var(--space-4);
-    font-family: var(--font-mono);
-    font-size: var(--text-caption);
-    font-style: normal;
-    letter-spacing: 0.08em;
-    color: var(--text-muted);
-  }
-
-  /* ------------------------------------------------------------------------
      Logo wall — placeholders until partners are signed.
      ------------------------------------------------------------------------ */
 
@@ -1801,7 +1770,7 @@
   }
   .logo-wall__role {
     display: block;
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: var(--text-caption);
     letter-spacing: 0.06em;
     color: var(--text-muted);
@@ -1875,7 +1844,7 @@
     font-weight: var(--weight-semibold);
   }
   .download-card__meta {
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: var(--text-caption);
     color: var(--text-muted);
     margin-block-start: 2px;
@@ -1916,7 +1885,7 @@
   .tab[aria-selected="true"]::after { transform: scaleX(1); }
   .tab__meta {
     display: block;
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: var(--text-caption);
     color: var(--text-muted);
     font-weight: var(--weight-regular);
@@ -1989,7 +1958,7 @@
     color: var(--text-secondary);
   }
   .field__hint {
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: var(--text-caption);
     color: var(--text-muted);
   }
@@ -2061,7 +2030,7 @@
   }
   .segment__desc {
     display: block;
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: var(--text-caption);
     color: var(--text-muted);
     margin-block-start: var(--space-2);
@@ -2071,7 +2040,9 @@
   .field-group {
     padding: var(--space-5);
     border: var(--hairline) solid var(--border-hairline);
-    border-left: 3px solid var(--accent-graphic);
+    /* 2px is the system's second weight, and logical so it mirrors in RTL.
+       Was a 3px physical border-left. */
+    border-inline-start: 2px solid var(--accent-graphic);
     border-radius: var(--radius-xs);
     background-color: var(--surface-sunken);
     display: flex;
@@ -2113,7 +2084,7 @@
     flex-wrap: wrap;
     align-items: center;
     gap: var(--space-2);
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: var(--text-caption);
     letter-spacing: 0.06em;
     color: var(--text-muted);
@@ -2146,6 +2117,17 @@
   }
   .site-footer a { color: var(--marine-100); text-decoration: none; }
   .site-footer a:hover { color: var(--white); text-decoration: underline; }
+
+  /* The logotype is a mark, not a link in a list: full-strength white, and it
+     never takes the footer's hover underline. */
+  .site-footer .logo,
+  .site-footer .logo:hover { color: var(--white); text-decoration: none; }
+
+  .footer__blurb {
+    max-inline-size: 34ch;
+    font-size: var(--text-small);
+    color: var(--marine-200);
+  }
 
   .footer-grid {
     display: grid;
@@ -2181,7 +2163,7 @@
     flex-wrap: wrap;
     gap: var(--space-4) var(--space-6);
     justify-content: space-between;
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: var(--text-caption);
     color: var(--marine-200);
     letter-spacing: 0.04em;
@@ -2208,6 +2190,25 @@
   }
   .use-case__desc { font-size: var(--text-small); line-height: 1.6; color: var(--text-secondary); }
 
+  /* Rule variants. These replace per-page inline border overrides that were
+     hand-rolling this component on a bare heading. */
+  .use-case--accent { border-block-start-color: var(--accent-graphic); }
+  .use-case--muted  { border-block-start-color: var(--border-strong); }
+  .use-case--strong { border-block-start-width: 2px; }
+
+  /* On a marine or navy field. */
+  .section--brand .use-case,
+  .section--inverse .use-case { border-block-start-color: var(--border-on-brand); }
+  .section--brand .use-case--accent,
+  .section--inverse .use-case--accent { border-block-start-color: var(--accent-graphic); }
+  .section--brand .use-case__desc,
+  .section--inverse .use-case__desc { color: var(--text-on-brand-dim); }
+
+  /* A fieldset used only for grouping semantics carries no chrome. */
+  .fieldset-plain { border: none; padding: 0; margin: 0; }
+  .fieldset-plain > legend { padding: 0; }
+
+
   /* ------------------------------------------------------------------------
      Data list — key/value pairs outside a table context.
      ------------------------------------------------------------------------ */
@@ -2229,7 +2230,7 @@
     color: var(--text-secondary);
   }
   .datalist__val {
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: var(--text-small);
     font-weight: var(--weight-medium);
     color: var(--text-primary);
@@ -2253,11 +2254,6 @@
 
   .text-center { text-align: center; }
   .text-end { text-align: end; }
-  .mono {
-    font-family: var(--font-mono);
-    letter-spacing: var(--tracking-mono);
-    font-variant-numeric: tabular-nums;
-  }
   .muted { color: var(--text-secondary); }
   .accent { color: var(--text-accent); }
   .lead {
@@ -2267,6 +2263,7 @@
     color: var(--text-secondary);
   }
   .nowrap { white-space: nowrap; }
+  .measure-lead { max-inline-size: var(--measure-lead); }
 
   .mt-0 { margin-block-start: 0; }
   .mt-3 { margin-block-start: var(--space-3); }
@@ -2275,6 +2272,7 @@
   .mt-6 { margin-block-start: var(--space-6); }
   .mt-7 { margin-block-start: var(--space-7); }
   .mt-8 { margin-block-start: var(--space-8); }
+  .mb-2 { margin-block-end: var(--space-2); }
   .mb-5 { margin-block-end: var(--space-5); }
   .mb-6 { margin-block-end: var(--space-6); }
   .mb-7 { margin-block-end: var(--space-7); }

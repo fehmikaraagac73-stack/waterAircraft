@@ -8,7 +8,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -16,7 +16,7 @@
 
 <a class="skip-link" href="#main">Skip to content</a>
 
-<header class="site-header" data-header data-over-hero="false">
+<header class="site-header" data-header data-over-hero="true">
   <div class="site-header__inner">
     <a class="logo" href="index.html" aria-label="ANUNNAKI — home">
       <span class="logo__mark">A</span><span>NUNNAKI</span>
@@ -103,9 +103,8 @@
       <p class="eyebrow">Program</p>
       <h2>Three phases, gated.</h2>
       <p class="section-header__lead">
-        Each phase is gated on the previous one completing. Phase 2 does not begin because Phase 1
-        is going well; it begins because Phase 1 has produced a vessel that floats, moves and
-        satisfies a surveyor.
+        Each phase is gated on the previous one completing — Phase 2 begins when Phase 1 has
+        produced a vessel that floats, moves and satisfies a surveyor.
       </p>
     </div>
 
@@ -117,16 +116,10 @@
           <h3 class="phase-card__title">Research &amp; develop prototype</h3>
         </div>
         <div class="phase-card__body">
-          <p class="vessel-card__desc">
-            Build one demonstration vessel. The goal is not a saleable ship — it is evidence.
-            Four things have to be proven:
+          <p class="phase-card__intro">
+            Build one demonstration vessel. The goal is not a saleable ship but evidence: measured
+            flotation, propulsion, stability and customer experience. The test schedule is below.
           </p>
-          <ul class="checklist">
-            <li><strong>Flotation</strong> — measured displacement, trim and freeboard against calculation</li>
-            <li><strong>Propulsion</strong> — thrust, manoeuvring, station-keeping, endurance</li>
-            <li><strong>Stability</strong> — inclining experiment, intact and damage curves</li>
-            <li><strong>Customer experience</strong> — boarding, circulation, comfort under way</li>
-          </ul>
           <p class="phase-card__status">BUDGET ESTIMATE · USD 2M · IN PROGRESS</p>
         </div>
       </article>
@@ -137,18 +130,10 @@
           <h3 class="phase-card__title">Conversion facility</h3>
         </div>
         <div class="phase-card__body">
-          <p class="vessel-card__desc">
-            Acquire retired airframes and stand up a repeatable conversion line. The cost structure
-            per hull breaks down as:
+          <p class="phase-card__intro">
+            Acquire retired airframes and stand up a repeatable conversion line. The per-hull cost
+            structure is broken out further down the page.
           </p>
-          <ul class="checklist">
-            <li>Aircraft acquisition and transport to the yard</li>
-            <li>Engineering and naval architecture</li>
-            <li>Marine integration — pontoons, deck, machinery</li>
-            <li>Certification, survey and plan approval</li>
-            <li>Labour</li>
-            <li>Testing and trials</li>
-          </ul>
           <p class="phase-card__status">NOT STARTED · GATED ON PHASE 1 COMPLETION</p>
         </div>
       </article>
@@ -159,13 +144,11 @@
           <h3 class="phase-card__title">Marketing &amp; sales</h3>
         </div>
         <div class="phase-card__body">
-          <p class="vessel-card__desc">Four customer segments, in order of how they buy:</p>
-          <ul class="checklist">
-            <li><strong>Governments</strong> — tourism grants, sustainability funds, long procurement, high certainty once won</li>
-            <li><strong>Resorts</strong> — an attraction that is also a working vessel; fastest decision cycle</li>
-            <li><strong>Commercial operators</strong> — island supply and short-haul freight, buying on economics</li>
-            <li><strong>Private owners</strong> — one-of-one custom vessels, highest margin per hull</li>
-          </ul>
+          <p class="phase-card__intro">
+            Commercial sales to four segments: governments buying with grant funding, resorts
+            buying fastest, commercial operators buying on economics, and private owners at the
+            highest margin per hull.
+          </p>
           <p class="phase-card__status">NOT STARTED · GATED ON PHASE 2</p>
         </div>
       </article>
@@ -249,9 +232,8 @@
 
     <div class="notice mt-7 reveal">
       <p class="notice__body">
-        <strong>The airframe is the cheap part.</strong> The value of this business is not in
-        sourcing aircraft — it is in owning the engineering and the certification route that turns
-        one into a registered vessel. That is also where the risk sits.
+        <strong>The airframe is the cheap part.</strong> The value sits in the engineering and the
+        certification route that turns one into a registered vessel, and so does the risk.
       </p>
     </div>
   </div>
@@ -265,55 +247,51 @@
     <div class="section-header reveal">
       <p class="eyebrow eyebrow--on-dark">Risk register</p>
       <h2>The things most likely to go wrong.</h2>
-      <p class="section-header__lead" style="color: var(--marine-100);">
-        Listed because a reader who cannot find them assumes they were hidden rather than absent.
-      </p>
     </div>
 
     <div class="auto-grid auto-grid--3">
-      <div class="reveal">
-        <h3 class="use-case__title" style="color: var(--white); border-block-start: 1px solid var(--accent-graphic); padding-block-start: var(--space-4);">Certification risk</h3>
-        <p style="color: var(--marine-100); font-size: var(--text-small); line-height: 1.6;">
+      <div class="use-case use-case--accent reveal">
+        <h3 class="use-case__title">Certification risk</h3>
+        <p class="use-case__desc">
           A first-of-type has no precedent for a society to reason from. Approval may require an
           equivalent-safety case, which takes longer and costs more than a prescriptive route.
           This is the largest single risk in the program.
         </p>
       </div>
-      <div class="reveal">
-        <h3 class="use-case__title" style="color: var(--white); border-block-start: 1px solid var(--accent-graphic); padding-block-start: var(--space-4);">Weight growth</h3>
-        <p style="color: var(--marine-100); font-size: var(--text-small); line-height: 1.6;">
+      <div class="use-case use-case--accent reveal">
+        <h3 class="use-case__title">Weight growth</h3>
+        <p class="use-case__desc">
           Marine outfit is heavier than aviation outfit for the same volume. If lightship weight
           grows, draft grows and speed falls. The inclining experiment is the first honest
           measurement of this.
         </p>
       </div>
-      <div class="reveal">
-        <h3 class="use-case__title" style="color: var(--white); border-block-start: 1px solid var(--accent-graphic); padding-block-start: var(--space-4);">Corrosion over service life</h3>
-        <p style="color: var(--marine-100); font-size: var(--text-small); line-height: 1.6;">
+      <div class="use-case use-case--accent reveal">
+        <h3 class="use-case__title">Corrosion over service life</h3>
+        <p class="use-case__desc">
           Aluminium superstructures are conventional, but a fuselage has far more faying surfaces
-          and fasteners than a purpose-built deckhouse. Service-life cost depends on how well this
-          is detailed at build.
+          and fasteners than a purpose-built deckhouse. Service-life cost depends on the detailing.
         </p>
       </div>
-      <div class="reveal">
-        <h3 class="use-case__title" style="color: var(--white); border-block-start: 1px solid var(--accent-graphic); padding-block-start: var(--space-4);">Berth compatibility</h3>
-        <p style="color: var(--marine-100); font-size: var(--text-small); line-height: 1.6;">
+      <div class="use-case use-case--accent reveal">
+        <h3 class="use-case__title">Berth compatibility</h3>
+        <p class="use-case__desc">
           A 22.4&nbsp;m beam rules out a meaningful number of berths and locks. The addressable
           route map is narrower than the length overall suggests, and needs surveying per customer.
         </p>
       </div>
-      <div class="reveal">
-        <h3 class="use-case__title" style="color: var(--white); border-block-start: 1px solid var(--accent-graphic); padding-block-start: var(--space-4);">Yard capability</h3>
-        <p style="color: var(--marine-100); font-size: var(--text-small); line-height: 1.6;">
+      <div class="use-case use-case--accent reveal">
+        <h3 class="use-case__title">Yard capability</h3>
+        <p class="use-case__desc">
           Few yards have both aluminium aerostructure experience and marine hull experience. The
           conversion line in Phase 2 exists partly because subcontracting this is difficult.
         </p>
       </div>
-      <div class="reveal">
-        <h3 class="use-case__title" style="color: var(--white); border-block-start: 1px solid var(--accent-graphic); padding-block-start: var(--space-4);">Market depth</h3>
-        <p style="color: var(--marine-100); font-size: var(--text-small); line-height: 1.6;">
-          Novelty sells the first hull. Whether it sells the tenth is unproven, and the cargo
-          configuration is the one with a business case independent of novelty.
+      <div class="use-case use-case--accent reveal">
+        <h3 class="use-case__title">Market depth</h3>
+        <p class="use-case__desc">
+          Novelty is expected to sell the first hull. Whether it sells the tenth is unproven. The
+          cargo configuration is the one with a business case independent of novelty.
         </p>
       </div>
     </div>
@@ -348,10 +326,10 @@
   <div class="container">
     <div class="footer-grid">
       <div class="footer-grid__brand">
-        <a class="logo logo--lg" href="index.html" aria-label="ANUNNAKI — home" style="color: var(--white);">
+        <a class="logo logo--lg" href="index.html" aria-label="ANUNNAKI — home">
           <span class="logo__mark">A</span><span>NUNNAKI</span>
         </a>
-        <p class="mt-5" style="max-inline-size: 34ch; font-size: var(--text-small); color: var(--marine-200);">
+        <p class="footer__blurb mt-5">
           Conversion of retired aircraft fuselages into custom marine vessels by integrating marine
           hull and pontoon systems, propulsion, and decorative modifications.
         </p>
@@ -401,5 +379,8 @@
 </footer>
 
 <script src="site.js"></script>
+<!-- impeccable-live-start -->
+<script src="http://localhost:8400/live.js?token=92280152-2b45-4974-8314-2dab729a905e"></script>
+<!-- impeccable-live-end -->
 </body>
 </html>

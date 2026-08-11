@@ -8,7 +8,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -109,28 +109,24 @@
           <stop offset="0%"   stop-color="#0F3966"/>
           <stop offset="100%" stop-color="#0C2C4E"/>
         </linearGradient>
-        <pattern id="heroGrid" width="48" height="48" patternUnits="userSpaceOnUse">
-          <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#FFFFFF" stroke-opacity="0.06" stroke-width="1"/>
-        </pattern>
       </defs>
 
       <rect width="1200" height="700" fill="url(#heroSky)"/>
-      <rect width="1200" height="700" fill="url(#heroGrid)"/>
       <rect y="470" width="1200" height="230" fill="url(#heroSea)"/>
 
       <!-- Horizon and swell -->
-      <path d="M0 470 H1200" stroke="#FFFFFF" stroke-opacity="0.22" stroke-width="1"/>
+      <path d="M0 470 H1200" stroke="#FFFFFF" stroke-opacity="0.15" stroke-width="1"/>
       <path d="M0 508 q60 -8 120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0"
-            fill="none" stroke="#FFFFFF" stroke-opacity="0.10" stroke-width="1.5"/>
+            fill="none" stroke="#FFFFFF" stroke-opacity="0.07" stroke-width="1.5"/>
       <path d="M0 556 q80 -10 160 0 t160 0 t160 0 t160 0 t160 0 t160 0 t160 0 t160 0"
-            fill="none" stroke="#FFFFFF" stroke-opacity="0.08" stroke-width="1.5"/>
+            fill="none" stroke="#FFFFFF" stroke-opacity="0.05" stroke-width="1.5"/>
 
       <!-- Vessel silhouette, drawn in white line on the marine field.
            The y-offset is derived, not eyeballed: the hull's local waterline
            sits at y=288, so to land it on the sea surface at y=470 the group
            translates by 470 - (288 x 0.78) = 245. -->
       <g transform="translate(140, 245) scale(0.78)" fill="none"
-         stroke="#FFFFFF" stroke-opacity="0.9" stroke-width="1.6"
+         stroke="#FFFFFF" stroke-opacity="0.72" stroke-width="1.6"
          stroke-linejoin="round" stroke-linecap="round">
 
         <!-- Fuselage with 747 upper deck -->
@@ -163,7 +159,7 @@
         <path d="M 152 248 L 1148 248 L 1148 290 Q 1148 300 1136 300 L 208 300
                  Q 170 294 152 248 Z"/>
         <!-- Hull stripe -->
-        <path d="M 200 268 L 1140 268" stroke="#F5851F" stroke-opacity="0.95" stroke-width="3"/>
+        <path d="M 200 268 L 1140 268" stroke="#F5851F" stroke-opacity="0.8" stroke-width="3"/>
 
         <!-- Propulsion pod -->
         <circle cx="1160" cy="286" r="12"/>
@@ -171,7 +167,7 @@
       </g>
 
       <!-- Waterline through the hulls -->
-      <path d="M0 470 H1200" stroke="#FFFFFF" stroke-opacity="0.28" stroke-width="1"/>
+      <path d="M0 470 H1200" stroke="#FFFFFF" stroke-opacity="0.20" stroke-width="1"/>
     </svg>
   </div>
 
@@ -179,7 +175,7 @@
 
   <div class="hero__inner container">
     <p class="eyebrow eyebrow--on-dark">Aircraft-to-marine conversion platform</p>
-    <h1 class="hero__title">A retired 747 does not have to become razor blades.</h1>
+    <h1 class="hero__title">Retired Boeing 747 airframes converted into certified marine vessels.</h1>
     <p class="hero__lead">
       We take one complete Boeing 747 fuselage — wings removed, tail assembly retained — and
       integrate it onto a twin pontoon hull as a certified marine vessel. Three configurations
@@ -193,14 +189,6 @@
           <path d="M2 8h11M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </a>
-      <a class="btn btn--on-brand-outline btn--lg" href="compliance.html">Compliance route</a>
-    </div>
-
-    <div class="cluster mt-7">
-      <span class="badge badge--on-brand">SOLAS</span>
-      <span class="badge badge--on-brand">IMO CODES</span>
-      <span class="badge badge--on-brand">USCG 46 CFR SUBCH. T</span>
-      <span class="badge badge--on-brand">CLASS SOCIETY PATH</span>
     </div>
   </div>
 
@@ -220,11 +208,9 @@
     <div class="notice reveal">
       <p class="notice__body">
         <strong>All particulars on this site are target figures for a vessel not yet built.</strong>
-        ANUNNAKI is at Phase&nbsp;1 — a single demonstration vessel intended to prove flotation,
-        propulsion, stability and customer experience. Figures derive from the general arrangement
-        studies shown throughout and are subject to class approval, tank testing and final
-        structural analysis. Current build status is stated plainly on the
-        <a href="program.html">program page</a>.
+        ANUNNAKI is at Phase&nbsp;1. Figures derive from the general arrangement studies shown
+        throughout and are subject to class approval, tank testing and structural analysis. Build
+        status is on the <a href="program.html">program page</a>.
       </p>
     </div>
   </div>
@@ -237,8 +223,7 @@
   <div class="container">
     <div class="split">
       <div class="reveal">
-        <p class="eyebrow">The proposition</p>
-        <h2>Aviation structures are lighter, stronger and better documented than anything the boatyard has.</h2>
+        <h2>An airframe arrives with known alloys, known geometry and complete structural documentation.</h2>
       </div>
       <div class="prose reveal">
         <p>
@@ -249,10 +234,9 @@
         </p>
         <p>
           We supply those three things. The fuselage is stripped, corrosion-treated and sealed;
-          watertight bulkheads are installed at the original frame stations; the whole assembly is
+          watertight bulkheads are installed at the original frame stations; the assembly is
           mounted on a twin pontoon hull that carries the displacement, the machinery and the
-          stability. The airframe becomes superstructure — which is exactly the load case it is
-          good at.
+          stability.
         </p>
         <p>
           <a class="btn btn--ghost" href="technology.html">
@@ -278,8 +262,8 @@
       <p class="eyebrow">Three configurations · one airframe</p>
       <h2>Same hull, same particulars envelope, three interiors.</h2>
       <p class="section-header__lead">
-        Length, beam and structural arrangement are common across all three. What changes is deck
-        layout, propulsion sizing, and the compliance annex the vessel is registered under.
+        Length, beam and structural arrangement are common to all three. What changes is deck
+        layout, propulsion sizing, and the annex the vessel is registered under.
       </p>
     </div>
 
@@ -427,10 +411,9 @@
 <section class="section">
   <div class="container">
     <div class="section-header reveal">
-      <p class="eyebrow">Process</p>
       <h2>How a conversion works</h2>
       <p class="section-header__lead">
-        Four stages between an airframe on a desert storage line and a vessel with a flag.
+        Four stages, from airframe selection through to flag registration.
       </p>
     </div>
 
@@ -438,33 +421,29 @@
       <div class="process__step reveal">
         <h3 class="process__title">Airframe selection</h3>
         <p class="process__desc">
-          Sourcing from storage and part-out inventory. Corrosion survey, structural repair history,
-          and frame-station integrity decide whether a hull is a candidate. Wings, engines and
-          landing gear are removed and returned to the parts market.
+          Sourcing from storage and part-out inventory. Corrosion survey, repair history and
+          frame-station integrity decide whether a hull is a candidate.
         </p>
       </div>
       <div class="process__step reveal">
         <h3 class="process__title">Structural preparation</h3>
         <p class="process__desc">
-          Interior strip, corrosion treatment, and installation of watertight bulkheads at the
-          original frame stations. Marine-grade reinforcement is added at the cradle interface
-          where the fuselage transfers load into the deck structure.
+          Interior strip, corrosion treatment and watertight bulkheads at the original frame
+          stations, with reinforcement at the cradle interface.
         </p>
       </div>
       <div class="process__step reveal">
         <h3 class="process__title">Marine integration</h3>
         <p class="process__desc">
-          Twin pontoon hulls, deck structure, machinery spaces, tankage and propulsion. This is
-          where the vessel gets its displacement, its stability curve and its class case — the
-          fuselage above is superstructure from here on.
+          Twin pontoon hulls, deck structure, machinery spaces, tankage and propulsion — where the
+          vessel gets its displacement and its stability curve.
         </p>
       </div>
       <div class="process__step reveal">
         <h3 class="process__title">Certification &amp; delivery</h3>
         <p class="process__desc">
-          Inclining experiment, sea trials, class survey, flag registration, and crew familiarisation.
-          Delivered against SOLAS, applicable IMO codes and — for US operation — 46&nbsp;CFR
-          Subchapter&nbsp;T.
+          Inclining experiment, sea trials, class survey, flag registration and crew
+          familiarisation.
         </p>
       </div>
     </div>
@@ -474,18 +453,18 @@
 <!-- ======================================================================
      CREDIBILITY BAND — stat strip on the marine field
      ====================================================================== -->
-<section class="section section--brand">
+<section class="section section--sunken">
   <div class="container">
     <div class="section-header reveal">
-      <p class="eyebrow eyebrow--on-brand">Target particulars</p>
-      <h2>The envelope, in numbers.</h2>
-      <p class="section-header__lead" style="color: var(--marine-100);">
+      <p class="eyebrow">Target particulars</p>
+      <h2>Principal particulars.</h2>
+      <p class="section-header__lead">
         Common to all three configurations unless stated. Derived from general arrangement studies;
         not yet validated by tank test or inclining experiment.
       </p>
     </div>
 
-    <div class="stat-strip stat-strip--on-brand reveal">
+    <div class="stat-strip reveal">
       <div class="stat">
         <span class="stat__value">70.6<span class="stat__unit">m</span></span>
         <span class="stat__label">Length overall</span>
@@ -513,7 +492,7 @@
       </div>
     </div>
 
-    <div class="notice notice--on-brand mt-7 reveal">
+    <div class="notice mt-7 reveal">
       <p class="notice__body">
         <strong>Read these as design targets.</strong> No ANUNNAKI vessel has completed sea trials.
         Speed, capacity and draft figures will move as the Phase&nbsp;1 hull is built and measured.
@@ -529,10 +508,10 @@
   <div class="container">
     <div class="section-header reveal">
       <p class="eyebrow">Compliance &amp; safety</p>
-      <h2>The regulatory case is the product.</h2>
+      <h2>Applicable frameworks and the certification route.</h2>
       <p class="section-header__lead">
-        A novel hull form does not get a novel rulebook. Every design decision here was made to
-        keep the vessel inside frameworks that already exist.
+        A novel hull form is still assessed under the existing rule set, and every design decision
+        was made to keep the vessel inside it.
       </p>
     </div>
 
@@ -541,34 +520,32 @@
         <span class="compliance-card__code">SOLAS</span>
         <h3 class="compliance-card__title">Safety of Life at Sea</h3>
         <p class="compliance-card__desc">
-          Subdivision and damage stability, fire protection with detection and sprinkler coverage,
-          life-saving appliances, and means of escape. Eight 50-person life rafts on the passenger
-          configuration, mounted both sides.
+          Subdivision and damage stability, fire protection, life-saving appliances and means of
+          escape.
         </p>
       </div>
       <div class="compliance-card reveal">
         <span class="compliance-card__code">46 CFR SUBCH. T</span>
         <h3 class="compliance-card__title">USCG small passenger vessels</h3>
         <p class="compliance-card__desc">
-          The route for US-flag passenger operation. Governs stability, watertight integrity,
-          egress arrangement, and crew requirements for the vessels in this size and service class.
+          The route for US-flag passenger operation: stability, watertight integrity, egress
+          arrangement and crew requirements.
         </p>
       </div>
       <div class="compliance-card reveal">
         <span class="compliance-card__code">IMO CODES</span>
         <h3 class="compliance-card__title">International instruments</h3>
         <p class="compliance-card__desc">
-          Load line, MARPOL for discharge and emissions, COLREG for navigation lights and shapes,
-          and the applicable intact stability code. The yacht configuration additionally targets
-          the Large Yacht Code.
+          Load line, MARPOL, COLREG and the applicable intact stability code. The yacht also
+          targets the Large Yacht Code.
         </p>
       </div>
       <div class="compliance-card reveal">
         <span class="compliance-card__code">CLASS &amp; FLAG</span>
         <h3 class="compliance-card__title">Society and registration path</h3>
         <p class="compliance-card__desc">
-          Plan approval, survey during construction, and class notation from a recognised society,
-          followed by flag registration. This is the step that turns an unusual object into a ship.
+          Plan approval, survey during construction and class notation from a recognised society,
+          followed by flag registration.
         </p>
       </div>
     </div>
@@ -590,7 +567,6 @@
 <section class="section section--sunken">
   <div class="container">
     <div class="section-header reveal">
-      <p class="eyebrow">Program</p>
       <h2>Three phases. We are in the first one.</h2>
     </div>
 
@@ -602,13 +578,10 @@
           <h3 class="phase-card__title">Research &amp; prototype</h3>
         </div>
         <div class="phase-card__body">
-          <p class="vessel-card__desc">Build one demonstration vessel to prove four things:</p>
-          <ul class="checklist">
-            <li>Flotation — displacement, trim and freeboard against calculation</li>
-            <li>Propulsion — thrust, manoeuvring and station-keeping</li>
-            <li>Stability — inclining experiment and intact stability curve</li>
-            <li>Customer experience — boarding, circulation, comfort at speed</li>
-          </ul>
+          <p class="phase-card__intro">
+            One demonstration vessel, to measure flotation, propulsion, stability and the
+            experience of boarding and circulation.
+          </p>
           <p class="phase-card__status">BUDGET ESTIMATE · USD 2M · IN PROGRESS</p>
         </div>
       </article>
@@ -619,17 +592,10 @@
           <h3 class="phase-card__title">Conversion facility</h3>
         </div>
         <div class="phase-card__body">
-          <p class="vessel-card__desc">
-            Acquire retired airframes and stand up a repeatable conversion line. Cost structure:
+          <p class="phase-card__intro">
+            Acquire retired airframes and stand up a repeatable conversion line, with engineering,
+            marine integration and certification as the dominant cost lines.
           </p>
-          <ul class="checklist">
-            <li>Airframe acquisition</li>
-            <li>Engineering and naval architecture</li>
-            <li>Marine integration and machinery</li>
-            <li>Certification and survey</li>
-            <li>Labour</li>
-            <li>Testing and trials</li>
-          </ul>
           <p class="phase-card__status">NOT STARTED · GATED ON PHASE 1</p>
         </div>
       </article>
@@ -640,12 +606,10 @@
           <h3 class="phase-card__title">Marketing &amp; sales</h3>
         </div>
         <div class="phase-card__body">
-          <ul class="checklist">
-            <li><strong>Governments</strong> — tourism grants and sustainability funds</li>
-            <li><strong>Resorts</strong> — a moored attraction that is also a working vessel</li>
-            <li><strong>Commercial operators</strong> — island supply and short-haul freight</li>
-            <li><strong>Private owners</strong> — one-of-one, fully custom, environmentally conscious</li>
-          </ul>
+          <p class="phase-card__intro">
+            Commercial sales to four buyer types: governments, resorts, commercial operators and
+            private owners.
+          </p>
           <p class="phase-card__status">NOT STARTED · GATED ON PHASE 2</p>
         </div>
       </article>
@@ -664,31 +628,6 @@
 </section>
 
 <!-- ======================================================================
-     PARTNERS — honest placeholders
-     ====================================================================== -->
-<section class="section section--sm">
-  <div class="container">
-    <div class="section-header section-header--center reveal">
-      <p class="eyebrow">Partners</p>
-      <h3>Class society, yard and supplier partners</h3>
-      <p class="section-header__lead">
-        Not yet appointed. These slots are held deliberately rather than filled with logos we have
-        no relationship with.
-      </p>
-    </div>
-
-    <div class="logo-wall reveal">
-      <div class="logo-wall__cell"><span class="logo-wall__name">To be appointed<span class="logo-wall__role">Classification society</span></span></div>
-      <div class="logo-wall__cell"><span class="logo-wall__name">To be appointed<span class="logo-wall__role">Naval architecture</span></span></div>
-      <div class="logo-wall__cell"><span class="logo-wall__name">To be appointed<span class="logo-wall__role">Conversion yard</span></span></div>
-      <div class="logo-wall__cell"><span class="logo-wall__name">To be appointed<span class="logo-wall__role">Propulsion supplier</span></span></div>
-      <div class="logo-wall__cell"><span class="logo-wall__name">To be appointed<span class="logo-wall__role">Airframe sourcing</span></span></div>
-      <div class="logo-wall__cell"><span class="logo-wall__name">To be appointed<span class="logo-wall__role">Flag administration</span></span></div>
-    </div>
-  </div>
-</section>
-
-<!-- ======================================================================
      CTA
      ====================================================================== -->
 <section class="cta-band">
@@ -696,9 +635,9 @@
     <div class="cta-band__inner">
       <div>
         <p class="eyebrow eyebrow--on-brand">Enquiries</p>
-        <h2>Tell us what water you operate on.</h2>
+        <h2>Tell us where you operate.</h2>
         <p class="mt-5">
-          The enquiry form branches by buyer type — a port authority and a private owner need
+          The enquiry form branches by buyer type: a port authority and a private owner need
           entirely different conversations, and we would rather start with the right one.
         </p>
       </div>
@@ -709,7 +648,6 @@
             <path d="M2 8h11M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </a>
-        <a class="btn btn--on-brand-outline btn--lg" href="vessels.html">Specification sheets</a>
       </div>
     </div>
   </div>
@@ -725,10 +663,10 @@
 
     <div class="footer-grid">
       <div class="footer-grid__brand">
-        <a class="logo logo--lg" href="index.html" aria-label="ANUNNAKI — home" style="color: var(--white);">
+        <a class="logo logo--lg" href="index.html" aria-label="ANUNNAKI — home">
           <span class="logo__mark">A</span><span>NUNNAKI</span>
         </a>
-        <p class="mt-5" style="max-inline-size: 34ch; font-size: var(--text-small); color: var(--marine-200);">
+        <p class="footer__blurb mt-5">
           Conversion of retired aircraft fuselages into custom marine vessels by integrating marine
           hull and pontoon systems, propulsion, and decorative modifications.
         </p>
@@ -783,5 +721,8 @@
 </footer>
 
 <script src="site.js"></script>
+<!-- impeccable-live-start -->
+<script src="http://localhost:8400/live.js?token=92280152-2b45-4974-8314-2dab729a905e"></script>
+<!-- impeccable-live-end -->
 </body>
 </html>

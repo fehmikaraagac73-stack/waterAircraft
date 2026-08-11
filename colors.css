@@ -65,13 +65,14 @@
        Display: Archivo (variable, width axis) — matches the logotype's wide,
                 flat-terminal geometry. The width axis is why headings can
                 echo the logo tracking without faking it with letter-spacing.
-       Body:    IBM Plex Sans — technical-document register.
-       Data:    IBM Plex Mono — spec values, registration marks, dimensions.
+       Body:    IBM Plex Sans — technical-document register. Also carries the
+                data register (spec values, registration marks, dimensions);
+                those sites use tabular-nums for column alignment rather than
+                a monospaced face.
        ---------------------------------------------------------------------- */
 
     --font-display: "Archivo", "Archivo Expanded", "Helvetica Neue", Arial, sans-serif;
     --font-body:    "IBM Plex Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
-    --font-mono:    "IBM Plex Mono", "Cascadia Mono", Consolas, "Courier New", monospace;
 
     /* Fluid scale. Ratios tuned so h2 and h1 never collide at 900–1100px. */
     --text-caption:  0.75rem;                                        /* 12 */
@@ -101,7 +102,7 @@
     --tracking-display: -0.02em;
     --tracking-heading: -0.01em;
     --tracking-eyebrow: 0.16em;
-    --tracking-mono:    0.01em;
+    --tracking-data:    0.01em;
 
     --weight-regular:  400;
     --weight-medium:   500;
